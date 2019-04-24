@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
@@ -171,3 +172,4 @@ public class VerticalLayout extends JComponent implements LayoutManager
     }
 */
 }
+
