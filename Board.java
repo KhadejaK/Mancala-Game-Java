@@ -1,13 +1,26 @@
 package MancalaProject;
 
-import java.awt.event.MouseListener;
+//import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.event.*;
 
-public class Board extends JFrame implements ChangeListener, MouseListener
+@SuppressWarnings("serial")
+public class Board extends JFrame implements ChangeListener//, MouseListener
 {
-	public Board(MancalaDataModel m)
+	private int[] data;
+	private MancalaDataModel dataModel;
+	private static final int TOTAL_PITS = 14;
+	
+	public Board(MancalaDataModel dm)
 	{
+		data = new int[TOTAL_PITS];
+		for(int i=0; i<dm.getData().length; i++)
+		{
+			data[i] = dm.getData()[i]; //should be same size
+		}
+		//data = dm.getData(); //shallow vs deep copy
+		dataModel = dm;
+		
 		//GUI + ActionListers
 		// Home page 1
 			// Layout 1 or Layout 2
@@ -17,15 +30,19 @@ public class Board extends JFrame implements ChangeListener, MouseListener
 			// 3 or 4 stones
 		
 		// After user decides, call LayoutManager 
+		// LayoutManager l;
 		// if ( choice = 1 )
-		// { LayoutManager l  = new HorizontalLayout() }
+		// { l  = new HorizontalLayout() }
+		// else
+		// { l  = new VerticalLayout() }
 	}
 
-	@Override
 	public void stateChanged(ChangeEvent e) 
 	{
-		// TODO Auto-generated method stub
-		
+		for(int i=0; i<dataModel.getData().length; i++)
+		{
+			data[i] = dataModel.getData()[i]; //should be same size
+		}
+		repaint();
 	}
-
 }
