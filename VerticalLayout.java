@@ -14,5 +14,4 @@ public class VerticalLayout implements BoardLayout
 		// TODO Auto-generated method stub
 		
 	}
-
 }
