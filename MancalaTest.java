@@ -1,10 +1,26 @@
-import javax.swing.*;
-import java.awt.*;
 
-public class MancalaTest {
-    public static void main(String[] args) {
+package MancalaProject;
 
-        VerticalLayout layoutV = new VerticalLayout();
+public class MancalaTest 
+{
+    public static void main(String[] args) 
+    {
+    	int[] dummyData = new int[14];
+    	
+    	for(int i=0; i<14; i++)
+    	{
+    		dummyData[i] = 3;
+    	}
+    	
+    	dummyData[4] = 7;
+    	dummyData[6] = 5;
+    	dummyData[10] = 13;
+    	dummyData[13] = 20;
+    	
+    	BoardLayout test = new HorizontalLayout();
+    	test.setData(dummyData);
+    	test.drawBoard();
+        //VerticalLayout layoutV = new VerticalLayout();
 
 
     }
