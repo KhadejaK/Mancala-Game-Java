@@ -1,9 +1,5 @@
-package MancalaProject;
-
-public interface BoardLayout 
-{
-	// Methods shared by both layout1 and layout2
-	public void setData(int[] data);
-	public void drawBoard();
-	
+public interface BoardLayout {
+    // Methods shared by both layout1 and layout2
+    public void setData(int[] data);
+    public void drawBoard();
 }
