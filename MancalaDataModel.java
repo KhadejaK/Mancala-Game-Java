@@ -1,4 +1,4 @@
-
+package MancalaProject;
 
 import java.util.ArrayList;
 import javax.swing.event.*;
@@ -6,9 +6,10 @@ import javax.swing.event.*;
 public class MancalaDataModel 
 {
 	private int[] data; 
-	//private int[] prevData = new int[data.length]; // Keeps data of previous 
+	private int[] prevData; // Keeps data of previous 
 	private ArrayList<ChangeListener> listeners;
 	private static final int TOTAL_PITS = 14;
+	private boolean isGameOver = false;
 	
 	//Constructor
 	public MancalaDataModel()
@@ -112,6 +113,9 @@ public class MancalaDataModel
 			}
 		}
 		
+		if(checkForEmptyRow())
+			isGameOver = true;
+		
 		// Starting at given pit, move stones 
 		// for loop starting at initial pit 
 		// If the last stone you drop is your own Mancala, you get a free turn
@@ -130,7 +134,8 @@ public class MancalaDataModel
 		}
 	}
 	
-	public boolean checkForEmptyRow() {
+	public boolean checkForEmptyRow() 
+	{
 		boolean emptyRow = false;
 		if (data[0] == 0 && data[1] == 0 && data[2] == 0 && data[3] == 0 && data[4] == 0 && data[5] == 0)
 			emptyRow = true;
@@ -138,5 +143,4 @@ public class MancalaDataModel
 			emptyRow = true;
 		return emptyRow;
 	}
-
 }
