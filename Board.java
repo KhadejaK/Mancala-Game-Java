@@ -14,8 +14,8 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 	private MancalaDataModel dataModel;
 	private BoardLayout layout;
 	private static final int TOTAL_PITS = 14;
-	private static final int PLAYER_A = 0;
-	private static final int PLAYER_B = 1;
+	private static final int PLAYER_A = 1;
+	private static final int PLAYER_B = 2;
 	
 	public Board(MancalaDataModel dm)
 	{
@@ -49,6 +49,12 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 	{
 		layout.setData(data);
 		layout.drawBoard();
+		playGame();
+	}
+	
+	public void playGame()
+	{
+		layout.whosTurn(PLAYER_A);
 	}
 	
 	public void homepage()
