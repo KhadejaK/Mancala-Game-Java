@@ -209,6 +209,4 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			pit.repaint();
 		}
 	}
-	
-	
 }
