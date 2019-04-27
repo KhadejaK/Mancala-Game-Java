@@ -17,6 +17,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 	private int[] data; // To get # of stones
 	private MancalaDataModel model;
 	private ArrayList<JButton> pits; 
+	private int player;
 	
 	
 	public HorizontalLayout(MancalaDataModel dm)
@@ -28,6 +29,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		{
 			pits.add(i, new JButton());
 		}
+		player = 1;
 	}
 	
 	public void setData(int[] d)
@@ -108,11 +110,15 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			pits.set(i, bPit);
 			
 			final int PIT = i;
-			bPit.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					model.updateStones(PIT);
-				}
-			});
+			
+//			if(player == 2)
+//			{
+//				bPit.addActionListener(new ActionListener(){
+//					public void actionPerformed(ActionEvent e){
+//						model.updateStones(PIT);
+//					}
+//				});
+//			}
 			
 			board.add(bPit);
 		}
@@ -131,12 +137,15 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			aPit.setIcon(stonesA);
 			
 			final int PIT = i;
-			aPit.addActionListener(new ActionListener(){
-				public void actionPerformed(ActionEvent e){
-					model.updateStones(PIT);
-				}
-			});
 			
+//			if(player == 1)
+//			{
+//				aPit.addActionListener(new ActionListener(){
+//					public void actionPerformed(ActionEvent e){
+//						model.updateStones(PIT);
+//					}
+//				});
+//			}
 			board.add(aPit);
 		}
 		
@@ -207,6 +216,41 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			pit.setIcon(stone);
 			
 			pit.repaint();
+		}
+	}
+
+	public void whosTurn(int whosturn) 
+	{
+		player = whosturn;
+		
+		if(player == 1)
+		{
+			for (int i=0; i<=6; i++)
+			{
+				JButton aPit = pits.get(i);
+				
+				final int index = i;
+				aPit.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						model.updateStones(index);
+					}
+				});
+			}
+		}
+		
+		if(player == 2)
+		{
+			for (int i=7; i>=12; i++)
+			{
+				JButton bPit = pits.get(i);
+				
+				final int index = i;
+				bPit.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						model.updateStones(index);
+					}
+				});
+			}
 		}
 	}
 }

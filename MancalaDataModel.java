@@ -33,6 +33,11 @@ public class MancalaDataModel
 		return copyData;
 	}
 	
+	public boolean isGameOver()
+	{
+		return isGameOver;
+	}
+	
 	public void initialStones(int initialValue)
 	{
 		for (int i=0; i<TOTAL_PITS; i++)
