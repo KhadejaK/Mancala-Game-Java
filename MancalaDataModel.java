@@ -1,4 +1,4 @@
-package MancalaProject;
+
 
 import java.util.ArrayList;
 import javax.swing.event.*;
@@ -6,7 +6,7 @@ import javax.swing.event.*;
 public class MancalaDataModel 
 {
 	private int[] data; 
-	private int[] prevData; // Keeps data of previous 
+	//private int[] prevData = new int[data.length]; // Keeps data of previous 
 	private ArrayList<ChangeListener> listeners;
 	private static final int TOTAL_PITS = 14;
 	
@@ -62,6 +62,56 @@ public class MancalaDataModel
 	
 	public void updateStones(int initialPit)
 	{
+		// replace prevData[] with data[] before updating
+
+		int numStones = data[initialPit];
+		int stones = numStones;
+		// remove all the stones in the pit
+		data[initialPit] = 0;
+
+		// update required pits 
+		for (int i = initialPit+1; i < stones+initialPit+1; i++) {
+			if (numStones != 0) {
+				// skips opponents pit
+				if (i == 13) {
+					i = -1;
+					continue;
+				}
+				
+				data[i]++;
+				numStones--;
+	
+				// Last Stone
+				if (numStones == 0) {
+					// lands in your own pit 
+					if (i == 6) {
+						// implement the free turn
+					}
+					// pit on your side is empty
+					if (i >= 0 && i < 6 && data[i] == 1) {
+						data[i] = 0;
+						int opponentPit = 0;
+						switch (i) {
+							case 0: opponentPit = data[12];
+								data[12] = 0; break;
+							case 1: opponentPit = data[11];
+								data[11] = 0; break;
+							case 2: opponentPit = data[10];
+								data[10] = 0; break; 
+							case 3: opponentPit = data[9];
+								data[9] = 0; break;
+							case 4: opponentPit = data[8];
+								data[8] = 0; break;
+							case 5: opponentPit = data[7];
+								data[7] = 0; break;
+							default:
+						}
+						data[6]+= opponentPit + 1;
+					}
+				}
+			}
+		}
+		
 		// Starting at given pit, move stones 
 		// for loop starting at initial pit 
 		// If the last stone you drop is your own Mancala, you get a free turn
@@ -78,6 +128,15 @@ public class MancalaDataModel
 		{
 			l.stateChanged(new ChangeEvent(this));
 		}
+	}
+	
+	public boolean checkForEmptyRow() {
+		boolean emptyRow = false;
+		if (data[0] == 0 && data[1] == 0 && data[2] == 0 && data[3] == 0 && data[4] == 0 && data[5] == 0)
+			emptyRow = true;
+		if (data[7] == 0 && data[8] == 0 && data[9] == 0 && data[10] == 0 && data[11] == 0 && data[12] == 0)
+			emptyRow = true;
+		return emptyRow;
 	}
 
 }
