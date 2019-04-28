@@ -4,5 +4,4 @@ public interface BoardLayout {
     public void setData(int[] data);
     public void drawBoard();
     public void repaintStones();
-   // public void whosTurn(PLAYER A);
 }
