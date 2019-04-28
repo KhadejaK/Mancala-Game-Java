@@ -3,19 +3,33 @@ import java.awt.Graphics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class HorizontalLayout implements BoardLayout
 {
 
     private static final int BASE_HEIGHT = 800;
     private static final int BASE_WIDTH =  1800;
-
-    private int[] data; // To get # of stones
     private static final int TOTAL_PITS = 14;
 
-    public HorizontalLayout()
+    private int[] data; // To get # of stones
+    private MancalaDataModel model;
+    private ArrayList<JButton> pits;
+    private int player;
+
+
+    public HorizontalLayout(MancalaDataModel dm)
     {
         data = new int[TOTAL_PITS];
+        model = dm;
+        pits = new ArrayList<JButton>();
+        for(int i=0; i<TOTAL_PITS; i++)
+        {
+            pits.add(i, new JButton());
+        }
+        player = 1;
     }
 
     public void setData(int[] d)
@@ -40,7 +54,7 @@ public class HorizontalLayout implements BoardLayout
 
         base.setLayout(new BorderLayout());
 
-        //Mancala B
+        // Mancala B
         JPanel mancalaB = new JPanel();
         mancalaB.setLayout(new BorderLayout());
         mancalaB.setSize(200, 800);
@@ -61,6 +75,8 @@ public class HorizontalLayout implements BoardLayout
         stonesBM.mancalaPit(true);
         b.setIcon(stonesBM);
 
+        pits.set(13, b);
+
         base.add(mancalaB, BorderLayout.WEST);
 
         //Board
@@ -69,6 +85,7 @@ public class HorizontalLayout implements BoardLayout
         board.setBackground(darkBlue);
         board.setOpaque(true);
 
+        // Add B Labels
         for(int i=6; i>0; i--)
         {
             JLabel bLabel = new JLabel("B" + i);
@@ -79,7 +96,8 @@ public class HorizontalLayout implements BoardLayout
             board.add(bLabel);
         }
 
-        for(int i=7; i<13; i++)
+        // Add B Pits
+        for(int i=12; i>=7; i--)
         {
             JButton bPit = new MyRoundedButton(200, 200);
             bPit.setPreferredSize(new Dimension(200+30, 200+30));
@@ -89,22 +107,49 @@ public class HorizontalLayout implements BoardLayout
             stonesB.mancalaPit(false);
             bPit.setIcon(stonesB);
 
+            pits.set(i, bPit);
+
+            final int PIT = i;
+
+			if(player == 2)
+			{
+				bPit.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						model.updateStones(PIT);
+					}
+				});
+			}
+
             board.add(bPit);
         }
 
+        // Add A Pits
         for(int i=0; i<6; i++)
         {
             JButton aPit = new MyRoundedButton(200, 200);
             aPit.setPreferredSize(new Dimension(200+30, 200+30));
+
+            pits.set(i, aPit);
 
             RoundStone stonesA = new RoundStone();
             stonesA.setNumStones(data[i]);
             stonesA.mancalaPit(false);
             aPit.setIcon(stonesA);
 
+            final int PIT = i;
+
+			if(player == 1)
+			{
+				aPit.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						model.updateStones(PIT);
+					}
+				});
+			}
             board.add(aPit);
         }
 
+        // Add B Label
         for(int i=1; i<7; i++)
         {
             JLabel aLabel = new JLabel("A" + i);
@@ -117,7 +162,7 @@ public class HorizontalLayout implements BoardLayout
 
         base.add(board, BorderLayout.CENTER);
 
-        //Mancala A
+        // Mancala A
         JPanel mancalaA = new JPanel();
         mancalaA.setLayout(new BorderLayout());
         mancalaA.setSize(200, 800);
@@ -132,6 +177,8 @@ public class HorizontalLayout implements BoardLayout
         JButton a = new MyRoundedButton(200, 800);
         a.setPreferredSize(new Dimension(200+35, 800));
         mancalaA.add(a, BorderLayout.CENTER);
+
+        pits.set(6, a);
 
         RoundStone stonesAM = new RoundStone();
         stonesAM.setNumStones(data[6]);
@@ -154,5 +201,57 @@ public class HorizontalLayout implements BoardLayout
         frame.setVisible(true);
     }
 
+    public void repaintStones()
+    {
+        for (int i=0; i<TOTAL_PITS; i++)
+        {
+            JButton pit = pits.get(i);
+
+            RoundStone stone = new RoundStone();
+            stone.setNumStones(data[i]);
+            if ( (i==6) || (i==13))
+                stone.mancalaPit(true);
+            else
+                stone.mancalaPit(false);
+            pit.setIcon(stone);
+
+            pit.repaint();
+        }
+    }
+
+    public void whosTurn(int whosturn)
+    {
+        player = whosturn;
+
+        if(player == 1)
+        {
+            for (int i=0; i<=6; i++)
+            {
+                JButton aPit = pits.get(i);
+
+                final int index = i;
+                aPit.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e){
+                        model.updateStones(index);
+                    }
+                });
+            }
+        }
+
+        if(player == 2)
+        {
+            for (int i=7; i>=12; i++)
+            {
+                JButton bPit = pits.get(i);
+
+                final int index = i;
+                bPit.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e){
+                        model.updateStones(index);
+                    }
+                });
+            }
+        }
+    }
 
 }

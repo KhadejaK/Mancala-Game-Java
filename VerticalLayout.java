@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,18 +12,12 @@ public class VerticalLayout extends JComponent implements BoardLayout
 {
     // Methods shared by both layout1 and layout2
 
-    private MancalaDataModel model;
-    private static final int stone_Height = 2;
-    private static final int stone_Width = 2;
-
-    StoneIcon stone;
-    int stone_count = 4;
-    int x;
-    int y;
-
-
-
+    MancalaDataModel data_model;
     private int[] data;
+    private Color black = Color.BLACK;
+    private Color pink = Color.PINK;
+    private Color orange = Color.ORANGE;
+    private Color white = Color.yellow;
     static final int NUM_PITS = 14;
 
 
@@ -45,23 +40,65 @@ public class VerticalLayout extends JComponent implements BoardLayout
         }
     }
 
+
+
     public void drawBoard() {
 
         // create new buttons A1-A6, B1-B6
         ArrayList<JButton> buttons = new ArrayList<JButton>();
-        for (int i = 1; i <= 6; i++) {
+
+        // create A pits
+        for (int i = 0; i <= 5; i++) {
             JButton button = new JButton();
             buttons.add(button);
-            button.setBackground(Color.PINK);
+            button.setBackground(pink);
             button.setOpaque(true);
             button.setLayout(new FlowLayout());
+            button.setBorder(new LineBorder(black));
+           // button.darkShadow();
+
+            final int pit = i;
+            // add actionListener to all the A pits
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("ActionListener of As.");
+                    // update stone at a pit
+                    System.out.println(pit);
+                    data_model = new MancalaDataModel();
+                    data_model.updateStones(pit);
+                    //button.repaint();
+
+
+                    // if player A ,works otherwise don't work
+                }
+            });
+
         }
-        for (int i = 1; i <= 6; i++) {
+        // create B pits
+        for (int i = 0; i <= 5; i++) {
             JButton button = new JButton();
             buttons.add(button);
-            button.setBackground(Color.YELLOW);
+            button.setBackground(orange);
             button.setOpaque(true);
             button.setLayout(new FlowLayout());
+            button.setBorder(new LineBorder(black));
+
+            final int pit = i + 6;
+            // add actionListener to all the Bs
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("ActionListener of Bs");
+                    System.out.println(pit);
+                    data_model = new MancalaDataModel();
+                    data_model.updateStones(pit);
+                    //button.repaint();
+
+                    // if user B, it works, otherwise, not working
+
+                }
+            });
         }
 
 
@@ -78,19 +115,20 @@ public class VerticalLayout extends JComponent implements BoardLayout
 
         // a panel with A1-B6
         JPanel names_panel_A = new JPanel();
-        names_panel_A.setPreferredSize(new Dimension(30,10));
+        names_panel_A.setPreferredSize(new Dimension(100,100));
         names_panel_A.setLayout(new GridLayout(6,1));
         for (int i = 1; i <= 6; i++) {
-            JLabel label = new JLabel("A" + i);
-            label.setSize(new Dimension(50,30));
+            JLabel label = new JLabel("A" + i, SwingConstants.CENTER);
+            label.setFont(new Font(label.getName(), Font.PLAIN, Math.min(20, 20)));
+
             names_panel_A.add(label);
         }
         JPanel names_panel_B = new JPanel();
-        names_panel_B.setPreferredSize(new Dimension(30,10));
+        names_panel_B.setPreferredSize(new Dimension(100,100));
         names_panel_B.setLayout(new GridLayout(6,1));
         for (int i = 1; i <= 6; i++) {
-            JLabel label = new JLabel("B" + i);
-            label.setSize(new Dimension(50,30));
+            JLabel label = new JLabel("B" + i,SwingConstants.CENTER);
+            label.setFont(new Font(label.getName(), Font.PLAIN, Math.min(20, 20)));
 
             names_panel_B.add(label);
         }
@@ -108,20 +146,18 @@ public class VerticalLayout extends JComponent implements BoardLayout
         pits_and_names_panel.add(names_panel_B, BorderLayout.EAST);
 
 
-
-
+        // mancala pits A and B
         JButton mancala_A = new JButton("Mancala A");
+        mancala_A.setFont(new Font("Arial", Font.ITALIC, 30));
         JButton mancala_B = new JButton("Mancala B");
-        //mancala_B.setPreferredSize(new Dimension(20,20));
-
-        // set pits background color
-        mancala_A.setBackground(Color.green);
+        mancala_B.setFont(new Font("Arial", Font.ITALIC, 30));
+        mancala_A.setBackground(white);
         mancala_A.setOpaque(true);
-        mancala_A.setPreferredSize(new Dimension(50, 50));
+        mancala_A.setPreferredSize(new Dimension(20, 70));
         mancala_A.setLayout(new FlowLayout());
-        mancala_B.setBackground(Color.green);
+        mancala_B.setBackground(white);
         mancala_B.setOpaque(true);
-        mancala_B.setPreferredSize(new Dimension(50, 50));
+        mancala_B.setPreferredSize(new Dimension(20, 70));
         mancala_B.setLayout(new FlowLayout());
 
 
@@ -136,63 +172,40 @@ public class VerticalLayout extends JComponent implements BoardLayout
         board_panel.add(pits_and_names_panel, BorderLayout.CENTER);
 
 
-
+        // undo button
         JButton undo = new JButton("Undo");
-        //undo.setPreferredSize(new Dimension(20,20));
+        undo.setPreferredSize(new Dimension(50,30));
+        undo.setFont(new Font("Lucida", Font.TYPE1_FONT, 20));
+        // undo button actionListener
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // dataModel.update();
+            }
+        });
 
 
         // the most outside box in the design
         JPanel layout_panel = new JPanel();
         // set the outer layout panel as box layout
-        layout_panel.setLayout(new BoxLayout(layout_panel, BoxLayout.Y_AXIS));
+        layout_panel.setLayout(new BorderLayout());
         // add pits_panel and undo button to board base
-        layout_panel.add(board_panel);
-        layout_panel.add(undo);
+        layout_panel.add(board_panel, BorderLayout.CENTER);
+        layout_panel.add(undo, BorderLayout.SOUTH);
 
 
-
-
-
-
-
-
-
-        // undo button actionListener
-        undo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // do something
-            }
-        });
-
-        // add actionListeners to all the pits buttons
-        for (int i = 0; i <= 11; i++) {
-            buttons.get(i).addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    x = getX();
-                    y = getY();
-
-                    for (int i = 0; i <= stone_count; i ++ ) {
-                        y = y + buttons.get(i).getHeight();
-                    }
-                    repaint();
-                }
-            });
-
-        }
-
-
-        Color stone_color = Color.BLUE;
-        int stone_size = 10;
+        // new stones
+        Color stone_color = Color.GRAY;
+        int stone_size = 12;
 
         int stone_in_A = data[6];
         for (int i = 0; i < stone_in_A; i++) {
-            mancala_A.add(new JLabel(new StoneIcon(stone_size, stone_color)));
+           mancala_A.add(new JLabel(new SquareStone(stone_size, stone_color)));
+//         mancala_A.add(new SquareStone().displayStone());
         }
         int stone_in_B = data[13];
         for (int i = 0; i < stone_in_B; i++) {
-            mancala_B.add(new JLabel(new StoneIcon(stone_size, stone_color)));
+           mancala_B.add(new JLabel(new SquareStone(stone_size, stone_color)));
         }
 
         // add stones to A's pits
@@ -200,7 +213,8 @@ public class VerticalLayout extends JComponent implements BoardLayout
             JButton button = buttons.get(i);
             int num_stone = data[i];
             for (int j = 0; j < num_stone; j++) {
-                button.add(new JLabel(new StoneIcon(stone_size, stone_color)));
+                button.add(new JLabel(new SquareStone(stone_size, stone_color)));
+
             }
         }
 
@@ -209,7 +223,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
             JButton button = buttons.get(i - 1);
             int num_stone = data[i];
             for (int j = 0; j < num_stone; j++) {
-                button.add(new JLabel(new StoneIcon(stone_size, stone_color)));
+                button.add(new JLabel(new SquareStone(stone_size, stone_color)));
             }
         }
 
@@ -229,4 +243,9 @@ public class VerticalLayout extends JComponent implements BoardLayout
 
     }
 
+    public void repaintStones() {
+
+    }
+
+    // player 1 is 1, and player 2 is 2
 }
