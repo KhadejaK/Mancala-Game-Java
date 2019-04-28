@@ -1,3 +1,4 @@
+
 package MancalaProject;
 
 import java.awt.*;
@@ -254,3 +255,4 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		}
 	}
 }
+

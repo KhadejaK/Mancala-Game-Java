@@ -1,3 +1,4 @@
+
 package MancalaProject;
 
 public interface BoardLayout 
@@ -8,3 +9,4 @@ public interface BoardLayout
 	public void repaintStones();
 	
 }
+

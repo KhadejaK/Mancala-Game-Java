@@ -1,3 +1,4 @@
+
 package MancalaProject;
 
 import java.util.ArrayList;
@@ -149,3 +150,4 @@ public class MancalaDataModel
 		return emptyRow;
 	}
 }
+
