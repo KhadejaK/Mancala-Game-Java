@@ -1,10 +1,11 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.nio.charset.MalformedInputException;
 
 public class MancalaTest {
     public static void main(String[] args) {
-            	int[] dummyData = new int[14];
+      int[] dummyData = new int[14];
 
     	for(int i=0; i<14; i++)
     	{
@@ -28,7 +29,7 @@ public class MancalaTest {
         test2.setData(dummyData);
         test2.drawBoard();
 
-/*        MancalaDataModel model = new MancalaDataModel();
+/*      MancalaDataModel model = new MancalaDataModel();
         Board board = new Board(model);
         model.attach(board);
         board.homepage();*/
@@ -39,3 +40,4 @@ public class MancalaTest {
 
     }
 }
+
