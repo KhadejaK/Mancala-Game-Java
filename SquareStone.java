@@ -6,6 +6,7 @@ import java.net.*;
 public class SquareStone implements Icon {
     Color color;
     int size;
+    int num_stones;
 
     // construct a stone given by color and size
     public SquareStone(int size, Color color) {
@@ -18,6 +19,10 @@ public class SquareStone implements Icon {
         this.size = size;
     }
 */
+
+    public void setNum_stones (int num_stones) {
+        this.num_stones = num_stones;
+    }
 
     @Override
     public int getIconHeight() {
