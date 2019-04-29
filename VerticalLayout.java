@@ -1,3 +1,10 @@
+/**
+ * This is a concrete vertical layout out of the layout manger pattern
+ * It displays a vertical layout of the mancala game with the JComponent
+ * and implements the actionListener and repaint stones in each pit afer
+ * stones numbers are changed, and determines who is current and next
+ * player.
+ */
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -284,6 +291,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
     public void whosTurn(int a_player) {
         this.player = a_player;
         message.setText("Now is Player " + player + "'s turn!");
-        message.setFont(new Font("Arial", Font.PLAIN, Math.min(20, 20)));
+        message.setFont(new Font("Arial", Font.PLAIN, Math.min(25, 25)));
     }
 }
