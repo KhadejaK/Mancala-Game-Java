@@ -1,3 +1,4 @@
+package MancalaProject;
 
 /**
  * This is a concrete vertical layout out of the layout manger pattern
@@ -14,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@SuppressWarnings("serial")
 public class VerticalLayout extends JComponent implements BoardLayout
 {
     private MancalaDataModel data_model;

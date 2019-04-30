@@ -42,7 +42,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			data[i] = d[i]; //should be same size
 		}
 	}
-	
+
 	public void drawBoard()
 	{
 		Color darkBlue = new Color(59, 168, 226);
@@ -170,6 +170,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		mancalaA.setSize(200, 800);
 		mancalaA.setBackground(darkBlue);
 		base.setOpaque(true);
+		
 		JLabel labelA = new JLabel("Mancala A");
 		labelA.setFont(new Font("Serif", Font.BOLD, 40));
 		labelA.setHorizontalAlignment(SwingConstants.CENTER);
@@ -187,15 +188,28 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		stonesAM.mancalaPit(true);
 		a.setIcon(stonesAM);
 		
+		// Add who's turn it is
+		whosTurn(1);
+		mancalaA.add(message, BorderLayout.SOUTH);
+		
 		base.add(mancalaA, BorderLayout.EAST);
 		
-		//Undo
+		// Undo
 		JButton undo = new JButton("Undo");
-		//undo.setPreferredSize(new Dimension(400, 100));
+		// undo.setPreferredSize(new Dimension(400, 100));
 		undo.setFont(new Font("Serif", Font.BOLD, 40));
 		Color mattedBlue = new Color(19, 118, 181);
 		undo.setBackground(mattedBlue);
+		undo.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+//				if(model.undoNum() != 3)
+//				{
+//					data = model.getPrevData();
+//				}
+			}
+		});
 		base.add(undo,BorderLayout.SOUTH);
+		
 		
 		frame.add(base);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -225,9 +239,12 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 	{
 		player = whosturn;
 		if (player == 1)
-		{
-			
-		}
+			message.setText("Player A's turn!");
+		else
+			message.setText("Player B's turn!");
 	
+		message.setFont(new Font("Serif", Font.BOLD, 30));
+		message.setHorizontalAlignment(SwingConstants.CENTER);
+		message.setBackground(new Color(117, 215, 255));
 	}
 }
