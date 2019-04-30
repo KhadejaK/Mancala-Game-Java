@@ -50,14 +50,30 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 			if(dataModel.isExtraTurn())
 				dataModel.resetExtraTurn();
 			else
-				player = PLAYER_B;
+			{
+				if(!dataModel.isUndo())
+				{
+					player = PLAYER_B;
+					dataModel.resetUndoNum();
+					dataModel.setUndo(false);
+				}
+			}
+				
 		}
 		else if (player == PLAYER_B)
 		{
 			if(dataModel.isExtraTurn())
 				dataModel.resetExtraTurn();
 			else
-				player = PLAYER_A;
+			{
+				if(!dataModel.isUndo())
+				{
+					player = PLAYER_A;
+					dataModel.resetUndoNum();
+					dataModel.setUndo(false);
+				}
+			}
+				
 		}
 		
 		if (dataModel.isGameOver())
