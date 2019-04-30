@@ -1,3 +1,4 @@
+
 /**
  * This is a concrete vertical layout out of the layout manger pattern
  * It displays a vertical layout of the mancala game with the JComponent

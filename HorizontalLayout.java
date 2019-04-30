@@ -1,4 +1,3 @@
-
 package MancalaProject;
 
 import java.awt.*;
@@ -20,6 +19,8 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 	private ArrayList<JButton> pits; 
 	private int player;
 	
+	private JLabel message;
+	
 	
 	public HorizontalLayout(MancalaDataModel dm)
 	{
@@ -31,6 +32,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			pits.add(i, new JButton());
 		}
 		player = 1;
+		message = new JLabel();
 	}
 	
 	public void setData(int[] d)
@@ -108,18 +110,17 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			stonesB.mancalaPit(false);
 			bPit.setIcon(stonesB);
 			
+			final int index = i;
+			bPit.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					if(player == 2)
+					{
+						model.updateStonesB(index);
+					}
+				}
+			});
+			
 			pits.set(i, bPit);
-			
-			final int PIT = i;
-			
-//			if(player == 2)
-//			{
-//				bPit.addActionListener(new ActionListener(){
-//					public void actionPerformed(ActionEvent e){
-//						model.updateStones(PIT);
-//					}
-//				});
-//			}
 			
 			board.add(bPit);
 		}
@@ -137,16 +138,16 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			stonesA.mancalaPit(false);
 			aPit.setIcon(stonesA);
 			
-			final int PIT = i;
+			final int index = i;
+			aPit.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					if(player == 1)
+					{
+						model.updateStonesA(index);
+					}
+				}
+			});
 			
-//			if(player == 1)
-//			{
-//				aPit.addActionListener(new ActionListener(){
-//					public void actionPerformed(ActionEvent e){
-//						model.updateStones(PIT);
-//					}
-//				});
-//			}
 			board.add(aPit);
 		}
 		
@@ -223,36 +224,10 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 	public void whosTurn(int whosturn) 
 	{
 		player = whosturn;
-		
-		if(player == 1)
+		if (player == 1)
 		{
-			for (int i=0; i<=6; i++)
-			{
-				JButton aPit = pits.get(i);
-				
-				final int index = i;
-				aPit.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						model.updateStones(index);
-					}
-				});
-			}
+			
 		}
-		
-		if(player == 2)
-		{
-			for (int i=7; i>=12; i++)
-			{
-				JButton bPit = pits.get(i);
-				
-				final int index = i;
-				bPit.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						model.updateStones(index);
-					}
-				});
-			}
-		}
+	
 	}
 }
-
