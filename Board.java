@@ -47,12 +47,21 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		
 		if (player == PLAYER_A)
 		{
-			player = PLAYER_B;
+			if(dataModel.isExtraTurn())
+				dataModel.resetExtraTurn();
+			else
+				player = PLAYER_B;
 		}
 		else if (player == PLAYER_B)
 		{
-			player = PLAYER_A;
+			if(dataModel.isExtraTurn())
+				dataModel.resetExtraTurn();
+			else
+				player = PLAYER_A;
 		}
+		
+		if (dataModel.isGameOver())
+			gameOverScreen(dataModel.getWinner());
 		layout.whosTurn(player);
 	}
 	
@@ -171,7 +180,7 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		
 		vertLayout.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				layout = new VerticalLayout();
+				layout = new VerticalLayout(dataModel);
 			}
 		});
 		mid.add(vertLayout);

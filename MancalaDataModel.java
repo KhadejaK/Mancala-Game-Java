@@ -44,11 +44,6 @@ public class MancalaDataModel
 		return copyPrevData;
 	}
 	
-	public boolean isGameOver()
-	{
-		return isGameOver;
-	}
-	
 	public void initialStones(int initialValue)
 	{
 		for (int i=0; i<TOTAL_PITS; i++)
@@ -64,14 +59,20 @@ public class MancalaDataModel
 		}
 	}
 	
-	public void setData(int[] a)
+	public void setDataAndUpdate(int[] a)
 	{
 		for(int i=0; i<a.length; i++)
 		{
 			data[i] = a[i]; //should be same size
 		}
+		
+		// Notify Action Listeners
+		for (ChangeListener l : listeners)
+		{
+			l.stateChanged(new ChangeEvent(this));
+		}
 	}
-	
+
 	public void attach(ChangeListener c)
 	{
 		listeners.add(c);
@@ -156,7 +157,7 @@ public class MancalaDataModel
 		// replace prevData[] with data[] before updating
 
 		int numStones = data[initialPit];
-		//int stones = numStones;
+		int stones = numStones;
 		
 		// remove all the stones in the pit
 		data[initialPit] = 0;
@@ -177,12 +178,12 @@ public class MancalaDataModel
 			if (index == 13){
 				index = -1;
 			}
-	
+			
 			// Last Stone
-			if (numStones == 0) 
+			if (stones == 1) 
 			{
 				// lands in your own pit 
-				if (index == 13) {
+				if (index == -1) {
 					// implement the free turn
 					extraTurn = true;	
 				}
@@ -216,6 +217,7 @@ public class MancalaDataModel
 				}
 			}
 			index++;
+			stones--;
 		}
 		
 		if(checkForEmptyRow())
@@ -257,5 +259,20 @@ public class MancalaDataModel
 		if (data[7] == 0 && data[8] == 0 && data[9] == 0 && data[10] == 0 && data[11] == 0 && data[12] == 0)
 			emptyRow = true;
 		return emptyRow;
+	}
+	
+	public boolean isGameOver()
+	{
+		return isGameOver;
+	}
+	
+	public int getWinner()
+	{
+		int winner = 1;
+		
+		if (data[6] < data[13])
+			winner = 2;
+		
+		return winner;
 	}
 }
