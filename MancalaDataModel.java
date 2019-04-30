@@ -1,16 +1,22 @@
 package MancalaProject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
 import javax.swing.event.*;
 
 public class MancalaDataModel 
 {
+	private static final int TOTAL_PITS = 14;
+	
 	private int[] data; 
 	private int[] prevData; // Keeps data of previous 
 	private ArrayList<ChangeListener> listeners;
-	private static final int TOTAL_PITS = 14;
-	private boolean isGameOver = false;
-	private boolean extraTurn = false;
+	private boolean isGameOver;
+	private boolean extraTurn;
+	private Stack<int[]> undoStack;
+	private int undoNum;
+	private boolean isUndo;
 	
 	//Constructor
 	public MancalaDataModel()
@@ -21,7 +27,21 @@ public class MancalaDataModel
 			data[i] = 0;
 		}
 		
+		prevData = new int[TOTAL_PITS];
+		for (int i=0; i<TOTAL_PITS; i++)
+		{
+			prevData[i] = 0;
+		}
+		
 		listeners = new ArrayList<ChangeListener>();
+		
+		isGameOver = false;
+		extraTurn = false;
+		
+		undoStack = new Stack<int[]>();
+		undoNum = 0;
+		isUndo = false;
+		
 	}
 	
 	public int[] getData()
@@ -36,12 +56,17 @@ public class MancalaDataModel
 	
 	public int[] getPrevData()
 	{
-		int[] copyPrevData = new int[TOTAL_PITS];
-		for(int i=0; i<TOTAL_PITS; i++)
-		{
-			copyPrevData[i] = prevData[i];
-		}
-		return copyPrevData;
+//		int[] copyPrevData = new int[TOTAL_PITS];
+//		for(int i=0; i<TOTAL_PITS; i++)
+//		{
+//			copyPrevData[i] = prevData[i];
+//		}
+//		return copyPrevData;
+		
+		if (undoStack.size() != 0)
+			return undoStack.pop();
+		else
+			return getData();
 	}
 	
 	public void initialStones(int initialValue)
@@ -81,6 +106,11 @@ public class MancalaDataModel
 	public void updateStonesA(int initialPit)
 	{
 		// replace prevData[] with data[] before updating
+		for(int i=0; i<TOTAL_PITS; i++)
+		{
+			prevData[i] = data[i];
+		}
+		undoStack.push(prevData);
 
 		int numStones = data[initialPit];
 		int stones = numStones;
@@ -155,6 +185,11 @@ public class MancalaDataModel
 	public void updateStonesB(int initialPit)
 	{
 		// replace prevData[] with data[] before updating
+		for(int i=0; i<TOTAL_PITS; i++)
+		{
+			prevData[i] = data[i];
+		}
+		undoStack.push(prevData);
 
 		int numStones = data[initialPit];
 		int stones = numStones;
@@ -223,17 +258,6 @@ public class MancalaDataModel
 		if(checkForEmptyRow())
 			isGameOver = true;
 		
-		// Starting at given pit, move stones 
-		// for loop starting at initial pit 
-		// If the last stone you drop is your own Mancala, you get a free turn
-		// If the last stone you drop is in an empty pit on your side, 
-		//   you get to take that stone and all of your opponents stones 
-		//   that are in the opposite pit.
-		//    - One stone, any empty pit on your side, take your stone and
-		//       opponents stones in opposite side and put in your Mancala
-		// Skip opponents Mancala
-		// The game ends when all six pits on one side of the Mancala board are empty
-		
 		//Notify
 		for (ChangeListener l : listeners)
 		{
@@ -274,5 +298,39 @@ public class MancalaDataModel
 			winner = 2;
 		
 		return winner;
+	}
+	
+	public boolean compareBoard()
+	{
+		if(undoStack.size() != 0)
+		{
+			return Arrays.equals(data, undoStack.peek());
+		}
+		else
+			return false;
+	}
+	
+	public int getUndoNum()
+	{
+		return undoNum;
+	}
+	
+	public void resetUndoNum()
+	{
+		undoNum = 0;
+	}
+	
+	public void incUndoNum()
+	{
+		undoNum++;
+	}
+	
+	public boolean isUndo()
+	{
+		return isUndo;
+	}
+	public void setUndo(boolean isUnd)
+	{
+		isUndo = isUnd;
 	}
 }

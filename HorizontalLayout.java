@@ -202,10 +202,12 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		undo.setBackground(mattedBlue);
 		undo.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-//				if(model.undoNum() != 3)
-//				{
-//					data = model.getPrevData();
-//				}
+				if(model.getUndoNum() < 3 && !model.compareBoard())
+				{
+					model.setDataAndUpdate(model.getPrevData());
+					model.incUndoNum();
+					model.setUndo(true);
+				}
 			}
 		});
 		base.add(undo,BorderLayout.SOUTH);
