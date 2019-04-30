@@ -83,7 +83,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
                         System.out.println("ActionListener of A: button = " + indexOfPitInButtons + ", update data = "
                                 + indexOfPitInDataModel);
                         // update stones in pit
-                        data_model.updateStones(indexOfPitInDataModel);
+                        data_model.updateStonesA(indexOfPitInDataModel);
                     }
                 }
             });
@@ -114,7 +114,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
                     if (player == 2) {
                         System.out.println("ActionListener of B: button = " + indexOfPitInButtons + ", update data = "
                                 + indexOfPitInDataModel);
-                        data_model.updateStones(indexOfPitInDataModel);
+                        data_model.updateStonesB(indexOfPitInDataModel);
                     }
                 }
             });
@@ -152,7 +152,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
             names_panel_B.add(label);
         }
 
-
         // a base to put pits panel
         JPanel pits_and_names_panel = new JPanel();
         pits_and_names_panel.setLayout(new BorderLayout());
@@ -163,7 +162,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
         pits_and_names_panel.add(pits_panel, BorderLayout.CENTER);
         pits_and_names_panel.add(names_panel_A, BorderLayout.WEST);
         pits_and_names_panel.add(names_panel_B, BorderLayout.EAST);
-
 
         // mancala pits A and B
         mancala_A = new JButton("Mancala A");
@@ -179,7 +177,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
         mancala_B.setOpaque(true);
         mancala_B.setPreferredSize(new Dimension(20, 70));
         mancala_B.setLayout(new FlowLayout());
-
 
         // the second largest box in the design
         JPanel board_panel = new JPanel();
