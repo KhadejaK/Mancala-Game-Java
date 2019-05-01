@@ -16,7 +16,6 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 	private static final int TOTAL_PITS = 14;
 	private static final int PLAYER_A = 1;
 	private static final int PLAYER_B = 2;
-	private int player = PLAYER_A;
 	
 	public Board(MancalaDataModel dm)
 	{
@@ -45,40 +44,42 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		layout.setData(data);
 		layout.repaintStones();
 		
-		if (player == PLAYER_A)
-		{
+		// Switch the players
+		if (dataModel.getPlayer() == PLAYER_A)
+		{	
 			if(dataModel.isExtraTurn())
+			{
 				dataModel.resetExtraTurn();
+			}
 			else
 			{
 				if(!dataModel.isUndo())
 				{
-					player = PLAYER_B;
-					dataModel.resetUndoNum();
-					dataModel.setUndo(false);
+					dataModel.setPlayer(PLAYER_B);
+					dataModel.resetUndoNumB();
 				}
 			}
 				
 		}
-		else if (player == PLAYER_B)
-		{
+		else if (dataModel.getPlayer() == PLAYER_B)
+		{	
 			if(dataModel.isExtraTurn())
+			{
 				dataModel.resetExtraTurn();
+			}
 			else
 			{
 				if(!dataModel.isUndo())
 				{
-					player = PLAYER_A;
-					dataModel.resetUndoNum();
-					dataModel.setUndo(false);
+					dataModel.setPlayer(PLAYER_A);
+					dataModel.resetUndoNumA();
 				}
 			}
-				
 		}
 		
 		if (dataModel.isGameOver())
 			gameOverScreen(dataModel.getWinner());
-		layout.whosTurn(player);
+		layout.whosTurn(dataModel.getPlayer());
 	}
 	
 	public void displayBoard()
@@ -188,7 +189,7 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		});
 		mid.add(horiLayout);
 		
-		JButton vertLayout = new JButton("Verticle");
+		JButton vertLayout = new JButton("Vertical");
 		vertLayout.setFont(new Font("Serif", Font.BOLD, 70));
 		vertLayout.setHorizontalAlignment(SwingConstants.CENTER);
 		vertLayout.setVerticalAlignment(SwingConstants.CENTER);

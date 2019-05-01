@@ -14,9 +14,14 @@ public class MancalaDataModel
 	private ArrayList<ChangeListener> listeners;
 	private boolean isGameOver;
 	private boolean extraTurn;
-	private Stack<int[]> undoStack;
-	private int undoNum;
+	
+	private int undoNumA;
+	private int undoNumB;
 	private boolean isUndo;
+	
+	private static final int PLAYER_A = 1;
+	//private static final int PLAYER_B = 2;
+	private int player = PLAYER_A;
 	
 	//Constructor
 	public MancalaDataModel()
@@ -38,9 +43,11 @@ public class MancalaDataModel
 		isGameOver = false;
 		extraTurn = false;
 		
-		undoStack = new Stack<int[]>();
-		undoNum = 0;
+		undoNumA = 0;
+		undoNumB = 0;
 		isUndo = false;
+		
+		player = PLAYER_A;
 		
 	}
 	
@@ -56,17 +63,12 @@ public class MancalaDataModel
 	
 	public int[] getPrevData()
 	{
-//		int[] copyPrevData = new int[TOTAL_PITS];
-//		for(int i=0; i<TOTAL_PITS; i++)
-//		{
-//			copyPrevData[i] = prevData[i];
-//		}
-//		return copyPrevData;
-		
-		if (undoStack.size() != 0)
-			return undoStack.pop();
-		else
-			return getData();
+		int[] copyPrevData = new int[TOTAL_PITS];
+		for(int i=0; i<TOTAL_PITS; i++)
+		{
+			copyPrevData[i] = prevData[i];
+		}
+		return copyPrevData;
 	}
 	
 	public void initialStones(int initialValue)
@@ -110,10 +112,10 @@ public class MancalaDataModel
 		{
 			prevData[i] = data[i];
 		}
-		undoStack.push(prevData);
 
 		int numStones = data[initialPit];
 		int stones = numStones;
+		
 		// remove all the stones in the pit
 		data[initialPit] = 0;
 
@@ -189,7 +191,6 @@ public class MancalaDataModel
 		{
 			prevData[i] = data[i];
 		}
-		undoStack.push(prevData);
 
 		int numStones = data[initialPit];
 		int stones = numStones;
@@ -207,7 +208,6 @@ public class MancalaDataModel
 			}
 			
 			data[index]++;
-			//numStones--; //Handled with for loop
 			
 			// reset to beginning
 			if (index == 13){
@@ -301,28 +301,40 @@ public class MancalaDataModel
 	}
 	
 	public boolean compareBoard()
-	{
-		if(undoStack.size() != 0)
-		{
-			return Arrays.equals(data, undoStack.peek());
-		}
-		else
-			return false;
+	{	
+		return Arrays.equals(data, prevData);
 	}
 	
-	public int getUndoNum()
+	public int getUndoNumA()
 	{
-		return undoNum;
+		return undoNumA;
 	}
 	
-	public void resetUndoNum()
+	public int getUndoNumB()
 	{
-		undoNum = 0;
+		return undoNumB;
 	}
 	
-	public void incUndoNum()
+	public void resetUndoNumA()
 	{
-		undoNum++;
+		undoNumA = 0;
+	}
+	
+	public void resetUndoNumB()
+	{
+		undoNumB = 0;
+	}
+	
+	public void incUndoNumA()
+	{
+		undoNumA++;
+		System.out.println("UndoNumA: " + undoNumA);
+	}
+	
+	public void incUndoNumB()
+	{
+		undoNumB++;
+		System.out.println("UndoNumA: " + undoNumB);
 	}
 	
 	public boolean isUndo()
@@ -332,5 +344,14 @@ public class MancalaDataModel
 	public void setUndo(boolean isUnd)
 	{
 		isUndo = isUnd;
+	}
+	
+	public int getPlayer()
+	{
+		return player;
+	}
+	public void setPlayer(int turn)
+	{
+		player = turn;
 	}
 }
