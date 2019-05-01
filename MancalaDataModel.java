@@ -1,16 +1,27 @@
 package MancalaProject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
 import javax.swing.event.*;
 
 public class MancalaDataModel 
 {
+	private static final int TOTAL_PITS = 14;
+	
 	private int[] data; 
 	private int[] prevData; // Keeps data of previous 
 	private ArrayList<ChangeListener> listeners;
-	private static final int TOTAL_PITS = 14;
-	private boolean isGameOver = false;
-	private boolean extraTurn = false;
+	private boolean isGameOver;
+	private boolean extraTurn;
+	
+	private int undoNumA;
+	private int undoNumB;
+	private boolean isUndo;
+	
+	private static final int PLAYER_A = 1;
+	//private static final int PLAYER_B = 2;
+	private int player = PLAYER_A;
 	
 	//Constructor
 	public MancalaDataModel()
@@ -21,7 +32,23 @@ public class MancalaDataModel
 			data[i] = 0;
 		}
 		
+		prevData = new int[TOTAL_PITS];
+		for (int i=0; i<TOTAL_PITS; i++)
+		{
+			prevData[i] = 0;
+		}
+		
 		listeners = new ArrayList<ChangeListener>();
+		
+		isGameOver = false;
+		extraTurn = false;
+		
+		undoNumA = 0;
+		undoNumB = 0;
+		isUndo = false;
+		
+		player = PLAYER_A;
+		
 	}
 	
 	public int[] getData()
@@ -44,11 +71,6 @@ public class MancalaDataModel
 		return copyPrevData;
 	}
 	
-	public boolean isGameOver()
-	{
-		return isGameOver;
-	}
-	
 	public void initialStones(int initialValue)
 	{
 		for (int i=0; i<TOTAL_PITS; i++)
@@ -64,14 +86,20 @@ public class MancalaDataModel
 		}
 	}
 	
-	public void setData(int[] a)
+	public void setDataAndUpdate(int[] a)
 	{
 		for(int i=0; i<a.length; i++)
 		{
 			data[i] = a[i]; //should be same size
 		}
+		
+		// Notify Action Listeners
+		for (ChangeListener l : listeners)
+		{
+			l.stateChanged(new ChangeEvent(this));
+		}
 	}
-	
+
 	public void attach(ChangeListener c)
 	{
 		listeners.add(c);
@@ -80,9 +108,14 @@ public class MancalaDataModel
 	public void updateStonesA(int initialPit)
 	{
 		// replace prevData[] with data[] before updating
+		for(int i=0; i<TOTAL_PITS; i++)
+		{
+			prevData[i] = data[i];
+		}
 
 		int numStones = data[initialPit];
 		int stones = numStones;
+		
 		// remove all the stones in the pit
 		data[initialPit] = 0;
 
@@ -154,9 +187,13 @@ public class MancalaDataModel
 	public void updateStonesB(int initialPit)
 	{
 		// replace prevData[] with data[] before updating
+		for(int i=0; i<TOTAL_PITS; i++)
+		{
+			prevData[i] = data[i];
+		}
 
 		int numStones = data[initialPit];
-		//int stones = numStones;
+		int stones = numStones;
 		
 		// remove all the stones in the pit
 		data[initialPit] = 0;
@@ -171,18 +208,17 @@ public class MancalaDataModel
 			}
 			
 			data[index]++;
-			//numStones--; //Handled with for loop
 			
 			// reset to beginning
 			if (index == 13){
 				index = -1;
 			}
-	
+			
 			// Last Stone
-			if (numStones == 0) 
+			if (stones == 1) 
 			{
 				// lands in your own pit 
-				if (index == 13) {
+				if (index == -1) {
 					// implement the free turn
 					extraTurn = true;	
 				}
@@ -216,21 +252,11 @@ public class MancalaDataModel
 				}
 			}
 			index++;
+			stones--;
 		}
 		
 		if(checkForEmptyRow())
 			isGameOver = true;
-		
-		// Starting at given pit, move stones 
-		// for loop starting at initial pit 
-		// If the last stone you drop is your own Mancala, you get a free turn
-		// If the last stone you drop is in an empty pit on your side, 
-		//   you get to take that stone and all of your opponents stones 
-		//   that are in the opposite pit.
-		//    - One stone, any empty pit on your side, take your stone and
-		//       opponents stones in opposite side and put in your Mancala
-		// Skip opponents Mancala
-		// The game ends when all six pits on one side of the Mancala board are empty
 		
 		//Notify
 		for (ChangeListener l : listeners)
@@ -257,5 +283,75 @@ public class MancalaDataModel
 		if (data[7] == 0 && data[8] == 0 && data[9] == 0 && data[10] == 0 && data[11] == 0 && data[12] == 0)
 			emptyRow = true;
 		return emptyRow;
+	}
+	
+	public boolean isGameOver()
+	{
+		return isGameOver;
+	}
+	
+	public int getWinner()
+	{
+		int winner = 1;
+		
+		if (data[6] < data[13])
+			winner = 2;
+		
+		return winner;
+	}
+	
+	public boolean compareBoard()
+	{	
+		return Arrays.equals(data, prevData);
+	}
+	
+	public int getUndoNumA()
+	{
+		return undoNumA;
+	}
+	
+	public int getUndoNumB()
+	{
+		return undoNumB;
+	}
+	
+	public void resetUndoNumA()
+	{
+		undoNumA = 0;
+	}
+	
+	public void resetUndoNumB()
+	{
+		undoNumB = 0;
+	}
+	
+	public void incUndoNumA()
+	{
+		undoNumA++;
+		System.out.println("UndoNumA: " + undoNumA);
+	}
+	
+	public void incUndoNumB()
+	{
+		undoNumB++;
+		System.out.println("UndoNumA: " + undoNumB);
+	}
+	
+	public boolean isUndo()
+	{
+		return isUndo;
+	}
+	public void setUndo(boolean isUnd)
+	{
+		isUndo = isUnd;
+	}
+	
+	public int getPlayer()
+	{
+		return player;
+	}
+	public void setPlayer(int turn)
+	{
+		player = turn;
 	}
 }

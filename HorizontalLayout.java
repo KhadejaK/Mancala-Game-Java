@@ -13,14 +13,14 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 	private static final int BASE_HEIGHT = 800;
 	private static final int BASE_WIDTH =  1800;
 	private static final int TOTAL_PITS = 14;
+	private static final int PLAYER_A = 1;
+	private static final int PLAYER_B = 2;
 
 	private int[] data; // To get # of stones
 	private MancalaDataModel model;
 	private ArrayList<JButton> pits; 
-	private int player;
 	
 	private JLabel message;
-	
 	
 	public HorizontalLayout(MancalaDataModel dm)
 	{
@@ -31,7 +31,6 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		{
 			pits.add(i, new JButton());
 		}
-		player = 1;
 		message = new JLabel();
 	}
 	
@@ -42,7 +41,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			data[i] = d[i]; //should be same size
 		}
 	}
-	
+
 	public void drawBoard()
 	{
 		Color darkBlue = new Color(59, 168, 226);
@@ -113,9 +112,10 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			final int index = i;
 			bPit.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					if(player == 2)
+					if(model.getPlayer() == 2)
 					{
-						model.updateStonesB(index);
+						if(data[index] != 0)
+						 model.updateStonesB(index);
 					}
 				}
 			});
@@ -141,9 +141,10 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 			final int index = i;
 			aPit.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					if(player == 1)
+					if(model.getPlayer() == 1)
 					{
-						model.updateStonesA(index);
+						if (data[index] != 0)
+							model.updateStonesA(index);
 					}
 				}
 			});
@@ -170,6 +171,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		mancalaA.setSize(200, 800);
 		mancalaA.setBackground(darkBlue);
 		base.setOpaque(true);
+		
 		JLabel labelA = new JLabel("Mancala A");
 		labelA.setFont(new Font("Serif", Font.BOLD, 40));
 		labelA.setHorizontalAlignment(SwingConstants.CENTER);
@@ -187,15 +189,48 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		stonesAM.mancalaPit(true);
 		a.setIcon(stonesAM);
 		
+		// Add who's turn it is
+		whosTurn(PLAYER_A);
+		mancalaA.add(message, BorderLayout.SOUTH);
+		
 		base.add(mancalaA, BorderLayout.EAST);
 		
-		//Undo
+		// Undo
 		JButton undo = new JButton("Undo");
-		//undo.setPreferredSize(new Dimension(400, 100));
+		// undo.setPreferredSize(new Dimension(400, 100));
 		undo.setFont(new Font("Serif", Font.BOLD, 40));
 		Color mattedBlue = new Color(19, 118, 181);
 		undo.setBackground(mattedBlue);
+		undo.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if(model.getPlayer() == PLAYER_B && model.getUndoNumA() < 3 && !model.compareBoard())
+				{
+					// Set player back to A
+					model.setPlayer(PLAYER_A);
+					model.incUndoNumA();
+					model.setUndo(true);
+					
+					int[] prevData = model.getPrevData();
+					model.setDataAndUpdate(prevData);
+					
+					model.setUndo(false);
+				}
+				else if(model.getPlayer() == PLAYER_A && model.getUndoNumB() < 3 && !model.compareBoard())
+				{
+					// Set player back to B
+					model.setPlayer(PLAYER_B);
+					model.incUndoNumB();
+					model.setUndo(true);
+					
+					int[] prevData = model.getPrevData();
+					model.setDataAndUpdate(prevData);
+					
+					model.setUndo(false);
+				}
+			}
+		});
 		base.add(undo,BorderLayout.SOUTH);
+		
 		
 		frame.add(base);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -223,11 +258,14 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 
 	public void whosTurn(int whosturn) 
 	{
-		player = whosturn;
-		if (player == 1)
-		{
-			
-		}
+		model.setPlayer(whosturn);
+		if (model.getPlayer() == 1)
+			message.setText("Player A's turn!");
+		else
+			message.setText("Player B's turn!");
 	
+		message.setFont(new Font("Serif", Font.BOLD, 30));
+		message.setHorizontalAlignment(SwingConstants.CENTER);
+		message.setBackground(new Color(117, 215, 255));
 	}
 }

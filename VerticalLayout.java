@@ -1,3 +1,4 @@
+
 /**
  * This is a concrete vertical layout class out of the layout manger interface
  * It displays a vertical layout board of the mancala game with the JComponent
@@ -30,8 +31,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
     static final int NUM_PITS = 14;
     private static final int PLAYER_A = 1;
     private static final int PLAYER_B = 2;
-
-    private int player;
 
     /**
      * Construct a Vertical Layout object
@@ -330,4 +329,3 @@ public class VerticalLayout extends JComponent implements BoardLayout
 //        message.setText("Now is Player " + player + "'s turn!");
         message.setFont(new Font("Arial", Font.PLAIN, Math.min(25, 25)));
     }
-}
