@@ -85,6 +85,18 @@ public class MancalaDataModel
 				data[i] = 0;
 			}
 		}
+		
+		for (int i=0; i<TOTAL_PITS; i++)
+		{
+			if((i != 6) || (i != 13))
+			{
+				prevData[i] = initialValue;
+			}
+			if( (i==6) || (i==13) )
+			{
+				prevData[i] = 0;
+			}
+		}
 	}
 	
 	public void setDataAndUpdate(int[] a)
@@ -133,9 +145,11 @@ public class MancalaDataModel
 				numStones--;
 	
 				// Last Stone
-				if (numStones == 0) {
+				if (numStones == 0) 
+				{
 					// lands in your own pit 
-					if (i == 6) {
+					if (i == 6) 
+					{
 						// implement the free turn
 						extraTurnA = true;
 					}
@@ -219,7 +233,8 @@ public class MancalaDataModel
 			if (stones == 1) 
 			{
 				// lands in your own pit 
-				if (index == -1) {
+				if (index == -1) 
+				{
 					// implement the free turn
 					extraTurnB = true;	
 				}
