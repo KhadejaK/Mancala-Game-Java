@@ -1,9 +1,10 @@
+package MancalaProject;
 
 /**
- * This is a concrete vertical layout class out of the layout manger interface
- * It displays a vertical layout board of the mancala game with the JComponent
- * and implements the actionListener and repaint stones in each pit after
- * stones' numbers are changed, and this class also implements who is current and next
+ * This is a concrete vertical layout out of the layout manger pattern
+ * It displays a vertical layout of the mancala game with the JComponent
+ * and implements the actionListener and repaint stones in each pit afer
+ * stones numbers are changed, and determines who is current and next
  * player.
  */
 import javax.swing.*;
@@ -14,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@SuppressWarnings("serial")
 public class VerticalLayout extends JComponent implements BoardLayout
 {
     private MancalaDataModel data_model;
@@ -21,7 +23,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
     private JButton mancala_A;
     private JButton mancala_B;
     private JLabel message;
-    JFrame frame;
 
     private int[] data;
     private Color black = Color.BLACK;
@@ -29,12 +30,11 @@ public class VerticalLayout extends JComponent implements BoardLayout
     private Color orange = Color.ORANGE;
     private Color white = Color.yellow;
     static final int NUM_PITS = 14;
-    private static final int PLAYER_A = 1;
-    private static final int PLAYER_B = 2;
+    private int player;
 
     /**
      * Construct a Vertical Layout object
-     * @param d data data_model object
+     * @param d data model object
      */
     public VerticalLayout(MancalaDataModel d) {
         this.data_model = d;
@@ -82,13 +82,11 @@ public class VerticalLayout extends JComponent implements BoardLayout
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // if player A, works; otherwise doesn't work
-                    if (data_model.getPlayer() == 1) {
-                        if(data[indexOfPitInButtons] != 0) {
-                            System.out.println("ActionListener of A: button = " + indexOfPitInButtons + ", update data = "
-                                    + indexOfPitInDataModel);
-                            // update stones in pit
-                            data_model.updateStonesA(indexOfPitInDataModel);
-                        }
+                    if (player == 1) {
+                        System.out.println("ActionListener of A: button = " + indexOfPitInButtons + ", update data = "
+                                + indexOfPitInDataModel);
+                        // update stones in pit
+                        data_model.updateStonesA(indexOfPitInDataModel);
                     }
                 }
             });
@@ -116,12 +114,10 @@ public class VerticalLayout extends JComponent implements BoardLayout
                 public void actionPerformed(ActionEvent e) {
                     //button.repaint();
                     // if user B, it works, otherwise, not working
-                    if (data_model.getPlayer() == 2) {
-                        if(data[indexOfPitInButtons] != 0) {
-                            System.out.println("ActionListener of B: button = " + indexOfPitInButtons + ", update data = "
-                                    + indexOfPitInDataModel);
-                            data_model.updateStonesB(indexOfPitInDataModel);
-                        }
+                    if (player == 2) {
+                        System.out.println("ActionListener of B: button = " + indexOfPitInButtons + ", update data = "
+                                + indexOfPitInDataModel);
+                        data_model.updateStonesB(indexOfPitInDataModel);
                     }
                 }
             });
@@ -206,31 +202,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
         undo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(data_model.getPlayer() == PLAYER_B && data_model.getUndoNumA() < 3 && !data_model.compareBoard())
-                {
-                    // Set player back to A
-                    data_model.setPlayer(PLAYER_A);
-                    data_model.incUndoNumA();
-                    data_model.setUndo(true);
-
-                    int[] prevData = data_model.getPrevData();
-                    data_model.setDataAndUpdate(prevData);
-
-                    data_model.setUndo(false);
-                }
-                else if(data_model.getPlayer() == PLAYER_A && data_model.getUndoNumB() < 3 && !data_model.compareBoard())
-                {
-                    // Set player back to B
-                    data_model.setPlayer(PLAYER_B);
-                    data_model.incUndoNumB();
-                    data_model.setUndo(true);
-
-                    int[] prevData = data_model.getPrevData();
-                    data_model.setDataAndUpdate(prevData);
-
-                    data_model.setUndo(false);
-                }
-
+                // dataModel.update();
             }
         });
 
@@ -252,7 +224,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
         repaintStones();
 
         // frame
-        frame = new JFrame();
+        JFrame frame = new JFrame();
         frame.setPreferredSize(new Dimension(1000,800));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(layout_panel);
@@ -277,7 +249,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
         for (int i = 0; i < stone_in_A; i++) {
             mancala_A.add(new JLabel(new SquareStone(stone_size, stone_color)));
         }
-        mancala_A.repaint();
 
         // repaint mancala B, index 13
         int stone_in_B = data[13];
@@ -286,7 +257,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
         for (int i = 0; i < stone_in_B; i++) {
             mancala_B.add(new JLabel(new SquareStone(stone_size, stone_color)));
         }
-        mancala_B.repaint();
 
         // add stones to A's pits
         for (int i = 0; i < 6; i++) {
@@ -298,7 +268,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
                 button.add(new JLabel(new SquareStone(stone_size, stone_color)));
 
             }
-            button.repaint();
         }
 
         // add stones to B's pits
@@ -310,7 +279,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
             for (int j = 0; j < num_stone; j++) {
                 button.add(new JLabel(new SquareStone(stone_size, stone_color)));
             }
-            button.repaint();
         }
     }
 
@@ -321,11 +289,8 @@ public class VerticalLayout extends JComponent implements BoardLayout
      * @param a_player int 1 or 2
      */
     public void whosTurn(int a_player) {
-        data_model.setPlayer(a_player);
-        if (data_model.getPlayer() == 1)
-            message.setText("Player A's turn!");
-        else
-            message.setText("Player B's turn!");
-//        message.setText("Now is Player " + player + "'s turn!");
+        this.player = a_player;
+        message.setText("Now is Player " + player + "'s turn!");
         message.setFont(new Font("Arial", Font.PLAIN, Math.min(25, 25)));
     }
+}
