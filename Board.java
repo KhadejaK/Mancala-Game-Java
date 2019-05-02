@@ -46,8 +46,6 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		// Switch the players
 		if (dataModel.getPlayer() == PLAYER_A)
 		{
-			System.out.println("Hi we in player A :)");
-			
 			if (dataModel.isExtraTurnA()) // Don't switch player
 			{
 				if (!dataModel.isUndo())
