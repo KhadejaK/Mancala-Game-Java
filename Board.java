@@ -31,7 +31,6 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		{
 			data[i] = dm.getData()[i]; //should be same size
 		}
-		
 	}
 
 	public void stateChanged(ChangeEvent e) 
@@ -46,39 +45,49 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		
 		// Switch the players
 		if (dataModel.getPlayer() == PLAYER_A)
-		{	
-			if(dataModel.isExtraTurn())
+		{
+			System.out.println("Hi we in player A :)");
+			
+			if (dataModel.isExtraTurnA()) // Don't switch player
 			{
-				dataModel.resetExtraTurn();
+				if (!dataModel.isUndo())
+				{
+					dataModel.resetUndoNumB(); 
+				}
+				
 			}
-			else
+			else if(!dataModel.isExtraTurnA())
 			{
-				if(!dataModel.isUndo())
+				if (!dataModel.isUndo())
 				{
 					dataModel.setPlayer(PLAYER_B);
-					dataModel.resetUndoNumB();
+					dataModel.resetUndoNumB(); 
 				}
 			}
-				
 		}
 		else if (dataModel.getPlayer() == PLAYER_B)
 		{	
-			if(dataModel.isExtraTurn())
+			if (dataModel.isExtraTurnB()) // Don't switch player
 			{
-				dataModel.resetExtraTurn();
+				if (!dataModel.isUndo())
+				{
+					dataModel.resetUndoNumA(); 
+				}
 			}
-			else
+			else if(!dataModel.isExtraTurnB())
 			{
-				if(!dataModel.isUndo())
+				if (!dataModel.isUndo())
 				{
 					dataModel.setPlayer(PLAYER_A);
-					dataModel.resetUndoNumA();
+					dataModel.resetUndoNumA(); 				
 				}
 			}
 		}
 		
+		// If the pits on one side is empty, end the game
 		if (dataModel.isGameOver())
 			gameOverScreen(dataModel.getWinner());
+		
 		layout.whosTurn(dataModel.getPlayer());
 	}
 	
