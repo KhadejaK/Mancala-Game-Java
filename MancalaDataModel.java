@@ -2,7 +2,6 @@ package MancalaProject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
 import javax.swing.event.*;
 
 public class MancalaDataModel 
@@ -13,7 +12,8 @@ public class MancalaDataModel
 	private int[] prevData; // Keeps data of previous 
 	private ArrayList<ChangeListener> listeners;
 	private boolean isGameOver;
-	private boolean extraTurn;
+	private boolean extraTurnA;
+	private boolean extraTurnB;
 	
 	private int undoNumA;
 	private int undoNumB;
@@ -41,7 +41,8 @@ public class MancalaDataModel
 		listeners = new ArrayList<ChangeListener>();
 		
 		isGameOver = false;
-		extraTurn = false;
+		extraTurnA = false;
+		extraTurnB = false;
 		
 		undoNumA = 0;
 		undoNumB = 0;
@@ -136,7 +137,7 @@ public class MancalaDataModel
 					// lands in your own pit 
 					if (i == 6) {
 						// implement the free turn
-						extraTurn = true;
+						extraTurnA = true;
 					}
 					// pit on your side is empty
 					if (i >= 0 && i < 6 && data[i] == 1) {
@@ -220,7 +221,7 @@ public class MancalaDataModel
 				// lands in your own pit 
 				if (index == -1) {
 					// implement the free turn
-					extraTurn = true;	
+					extraTurnB = true;	
 				}
 				// pit on your side is empty
 				if (index >= 7 && index < 13 && data[index] == 1) 
@@ -265,14 +266,24 @@ public class MancalaDataModel
 		}
 	}
 	
-	public boolean isExtraTurn()
+	public boolean isExtraTurnA()
 	{
-		return extraTurn;
+		return extraTurnA;
 	}
 	
-	public void resetExtraTurn()
+	public boolean isExtraTurnB()
 	{
-		extraTurn = false;
+		return extraTurnB;
+	}
+	
+	public void resetExtraTurnA()
+	{
+		extraTurnA = false;
+	}
+	
+	public void resetExtraTurnB()
+	{
+		extraTurnB = false;
 	}
 	
 	public boolean checkForEmptyRow() 
@@ -292,9 +303,25 @@ public class MancalaDataModel
 	
 	public int getWinner()
 	{
+		// Default: Initialize Player A as winner
 		int winner = 1;
 		
-		if (data[6] < data[13])
+		// Calculate Player A Total Stones
+		int player1 = 0;
+		for(int i=0; i<=6; i++)
+		{
+			player1 += data[i];
+		}
+		
+		// Calculate Player B Total Stones
+		int player2 = 0;
+		for(int j=7; j<=13; j++)
+		{
+			player2 += data[j];
+		}
+		
+		// If Player A has less stones than Player B, winner is Player B
+		if (player1 < player2)
 			winner = 2;
 		
 		return winner;
@@ -328,13 +355,11 @@ public class MancalaDataModel
 	public void incUndoNumA()
 	{
 		undoNumA++;
-		System.out.println("UndoNumA: " + undoNumA);
 	}
 	
 	public void incUndoNumB()
 	{
 		undoNumB++;
-		System.out.println("UndoNumA: " + undoNumB);
 	}
 	
 	public boolean isUndo()

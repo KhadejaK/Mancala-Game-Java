@@ -31,7 +31,6 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		{
 			data[i] = dm.getData()[i]; //should be same size
 		}
-		
 	}
 
 	public void stateChanged(ChangeEvent e) 
@@ -46,39 +45,69 @@ public class Board extends JFrame implements ChangeListener//, MouseListener
 		
 		// Switch the players
 		if (dataModel.getPlayer() == PLAYER_A)
-		{	
-			if(dataModel.isExtraTurn())
+		{
+			System.out.println("Hi we in player A :)");
+			
+			// isUndo == true && isExtraTurnA == true
+			if (dataModel.isUndo() && dataModel.isExtraTurnA())
 			{
-				dataModel.resetExtraTurn();
+				dataModel.resetExtraTurnA();   // Reset the extra turn
+				System.out.println("A if 1 : reset the extra turn");
 			}
-			else
+			// isUndo == false && isExtraTurnA == true
+			else if(!dataModel.isUndo() && dataModel.isExtraTurnA())
 			{
-				if(!dataModel.isUndo())
-				{
-					dataModel.setPlayer(PLAYER_B);
-					dataModel.resetUndoNumB();
-				}
+				//dataModel.resetExtraTurnA();   // Reset the extra turn
+				System.out.println("A if 2 : did not reset the extra turn");
 			}
-				
+			// isUndo == true && extraTurnA == false
+			else if(dataModel.isUndo() && !dataModel.isExtraTurnA())
+			{
+					System.out.println("A if 3 : didnt set the player as B");
+					
+			}
+			// isUndo == false && isExtraTurnA == false
+			else if(!dataModel.isUndo() && !dataModel.isExtraTurnA())
+			{
+				dataModel.setPlayer(PLAYER_B); // Switch Player to A
+				dataModel.resetUndoNumB();     // Reset Player A's undo number
+				System.out.println("A if 4 : set the player as B & reset B's undo number");
+			}
 		}
 		else if (dataModel.getPlayer() == PLAYER_B)
 		{	
-			if(dataModel.isExtraTurn())
+			System.out.println("Hi we in player B :)");
+			
+			// isUndo == true && isExtraTurnB == true
+			if (dataModel.isUndo() && dataModel.isExtraTurnB())
 			{
-				dataModel.resetExtraTurn();
+				dataModel.resetExtraTurnB();   // Reset the extra turn
+				System.out.println("B if 1 : reset the extra turn");
 			}
-			else
+			// isUndo == false && isExtraTurnB == true
+			else if(!dataModel.isUndo() && dataModel.isExtraTurnB())
 			{
-				if(!dataModel.isUndo())
-				{
-					dataModel.setPlayer(PLAYER_A);
-					dataModel.resetUndoNumA();
-				}
+				//dataModel.resetExtraTurnB();   // Reset the extra turn
+				System.out.println("B if 2 : did not reset the extra turn");
+			}
+			// isUndo == true && extraTurnB == false
+			else if(dataModel.isUndo() && !dataModel.isExtraTurnB())
+			{
+					System.out.println("B if 3 : didnt set the player as A");
+			}
+			// isUndo == false && isExtraTurnB == false
+			else if(!dataModel.isUndo() && !dataModel.isExtraTurnB())
+			{
+				dataModel.setPlayer(PLAYER_A); // Switch Player to A
+				dataModel.resetUndoNumA();     // Reset Player A's undo number
+				System.out.println("B if 4 : set the player as A and reset A's undo number");
 			}
 		}
 		
+		// If the pits on one side is empty, end the game
 		if (dataModel.isGameOver())
 			gameOverScreen(dataModel.getWinner());
+		
 		layout.whosTurn(dataModel.getPlayer());
 	}
 	
