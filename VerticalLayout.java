@@ -1,4 +1,3 @@
-
 /**
  * This is a concrete vertical layout class out of the layout manger interface
  * It displays a vertical layout board of the mancala game with the JComponent
@@ -205,7 +204,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
         undo.setPreferredSize(new Dimension(50,30));
         undo.setFont(new Font("Lucida", Font.TYPE1_FONT, 20));
 
-        // TODO: undo button
         // undo button actionListener
         undo.addActionListener(new ActionListener() {
             @Override
@@ -375,4 +373,3 @@ public class VerticalLayout extends JComponent implements BoardLayout
         message.setFont(new Font("Arial", Font.PLAIN, Math.min(25, 25)));
     }
 }
-
