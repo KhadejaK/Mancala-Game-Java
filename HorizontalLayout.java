@@ -81,7 +81,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		
 		base.add(mancalaB, BorderLayout.WEST);
 		
-		//Board 
+		// Board panel
 		JPanel board = new JPanel();
 		board.setLayout(new GridLayout(4, 6));
 		board.setBackground(darkBlue);
@@ -115,7 +115,10 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 					if(model.getPlayer() == 2)
 					{
 						if(data[index] != 0)
-						 model.updateStonesB(index);
+						{
+							model.resetExtraTurnB();
+							model.updateStonesB(index);
+						}
 					}
 				}
 			});
@@ -144,7 +147,10 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 					if(model.getPlayer() == 1)
 					{
 						if (data[index] != 0)
+						{
+							model.resetExtraTurnA();
 							model.updateStonesA(index);
+						}
 					}
 				}
 			});
@@ -203,35 +209,52 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		undo.setBackground(mattedBlue);
 		undo.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				if(model.getPlayer() == PLAYER_B && model.getUndoNumA() < 3 && !model.compareBoard())
+				if( model.isExtraTurnA() && (model.getPlayer() == PLAYER_A) && model.getUndoNumA() < 3 && !model.compareBoard() )
 				{
-					// Set player back to A
+					model.incUndoNumA();
+					model.setUndo(true);
+					
+					int[] prevData = model.getPrevData();
+					model.setDataAndUpdate(prevData);
+
+					model.setUndo(false);
+				}
+				else if(!model.isExtraTurnB() && (model.getPlayer() == PLAYER_B) && model.getUndoNumA() < 3 && !model.compareBoard())
+				{
 					model.setPlayer(PLAYER_A);
 					model.incUndoNumA();
 					model.setUndo(true);
 					
 					int[] prevData = model.getPrevData();
 					model.setDataAndUpdate(prevData);
-					
+
 					model.setUndo(false);
 				}
-				else if(model.getPlayer() == PLAYER_A && model.getUndoNumB() < 3 && !model.compareBoard())
+				else if( model.isExtraTurnB() && (model.getPlayer() == PLAYER_B) && model.getUndoNumB() < 3 && !model.compareBoard() )
 				{
-					// Set player back to B
+					model.incUndoNumB();
+					model.setUndo(true);
+													
+					int[] prevData = model.getPrevData();
+					model.setDataAndUpdate(prevData);					
+				
+					model.setUndo(false);
+				}
+				else if( !model.isExtraTurnA() && (model.getPlayer() == PLAYER_A) && model.getUndoNumB() < 3 && !model.compareBoard())
+				{
 					model.setPlayer(PLAYER_B);
 					model.incUndoNumB();
 					model.setUndo(true);
-					
+													
 					int[] prevData = model.getPrevData();
-					model.setDataAndUpdate(prevData);
-					
+					model.setDataAndUpdate(prevData);					
+				
 					model.setUndo(false);
 				}
 			}
 		});
 		base.add(undo,BorderLayout.SOUTH);
-		
-		
+	
 		frame.add(base);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.pack();

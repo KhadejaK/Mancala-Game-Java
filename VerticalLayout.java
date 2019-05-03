@@ -1,3 +1,4 @@
+
 /**
  * This is a concrete vertical layout class out of the layout manger interface
  * It displays a vertical layout board of the mancala game with the JComponent
@@ -374,3 +375,4 @@ public class VerticalLayout extends JComponent implements BoardLayout
         message.setFont(new Font("Arial", Font.PLAIN, Math.min(25, 25)));
     }
 }
+
