@@ -116,12 +116,12 @@ public class MancalaDataModel
 
         for (int i=0; i<TOTAL_PITS; i++)
         {
-            // don't put pits in players A and B mancalas for previous data as well
+            // don't put pits in players A and B mancalas for previous data
             if((i != 6) || (i != 13))
             {
                 prevData[i] = initialValue;
             }
-            // set 0 stones in A and B mancala for previous data as well
+            // set 0 stones in A and B mancala for previous data
             if( (i==6) || (i==13) )
             {
                 prevData[i] = 0;
