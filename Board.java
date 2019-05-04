@@ -124,6 +124,7 @@ public class Board extends JFrame implements ChangeListener
      */
     public void gameOverScreen(int winner)
     {
+        // a game over frame
         JFrame frame = new JFrame("Game Over");
         frame.setSize(600, 300);
         frame.setLayout(new BorderLayout());
@@ -142,6 +143,7 @@ public class Board extends JFrame implements ChangeListener
 
         frame.add(gameOver, BorderLayout.CENTER);
 
+        // a close button
         JButton close = new JButton("Close");
         close.setFont(new Font("Serif", Font.BOLD, 30));
         close.addActionListener(new ActionListener(){
@@ -166,14 +168,17 @@ public class Board extends JFrame implements ChangeListener
         Color boardColor = new Color(66, 244, 179);
         Color buttonColor = new Color(212, 252, 237);
 
+        // home page frame
         JFrame frame = new JFrame("Mancala Homepage");
         frame.setSize(500, 600);
         frame.setLayout(new BorderLayout());
 
+        // a base panel
         JPanel base = new JPanel();
         base.setLayout(new BorderLayout());
         base.setSize(500, 600);
 
+        // a top panel
         JPanel top = new JPanel();
         top.setLayout(new FlowLayout());
         top.setSize(500, 200);
@@ -210,8 +215,10 @@ public class Board extends JFrame implements ChangeListener
         });
         top.add(fourStones);
 
+        // add top to base
         base.add(top, BorderLayout.NORTH);
 
+        // a mid panel
         JPanel mid = new JPanel();
         mid.setLayout(new FlowLayout());
         mid.setSize(500, 200);
@@ -248,18 +255,21 @@ public class Board extends JFrame implements ChangeListener
 
         base.add(mid, BorderLayout.CENTER);
 
+        // a bot panel
         JPanel bot = new JPanel();
         bot.setLayout(new FlowLayout());
         bot.setSize(400, 200);
         bot.setBackground(boardColor);
         bot.setOpaque(true);
 
+        // a done button
         JButton done = new JButton("Done!");
         done.setFont(new Font("Serif", Font.BOLD, 40));
         done.setHorizontalAlignment(SwingConstants.CENTER);
         done.setVerticalAlignment(SwingConstants.CENTER);
         done.setBackground(buttonColor);
 
+        // add actionListener to done button
         done.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 displayBoard();
@@ -267,6 +277,7 @@ public class Board extends JFrame implements ChangeListener
         });
         bot.add(done);
 
+        // add bot to base
         base.add(bot, BorderLayout.SOUTH);
 
         frame.add(base, BorderLayout.CENTER);
