@@ -1,7 +1,7 @@
 /**
- * This is a concrete vertical layout class out of the layout manger interface
- * It displays a vertical layout board of the mancala game with the JComponent
- * and implements the actionListener and repaint stones in each pit after
+ * This is a concrete vertical layout class out of the layout manage interface
+ * It displays a vertical layout board of the Mancala game with the JComponent
+ * and implements the actionListener and repaints stones in each pit after
  * stones' numbers are changed, and this class also implements who is current and next
  * player.
  */
@@ -31,8 +31,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
     private static final int PLAYER_A = 1;
     private static final int PLAYER_B = 2;
 
-    //private int player;
-
     /**
      * Construct a Vertical Layout object
      * @param d data data_model object
@@ -59,7 +57,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
     }
 
     /**
-     * draw mancala board
+     * draw Mancala board
      */
     public void drawBoard() {
 
@@ -122,6 +120,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
                         if(data[indexOfPitInDataModel] != 0) {
                             System.out.println("ActionListener of B: button = " + indexOfPitInButtons + ", update data = "
                                     + indexOfPitInDataModel);
+                            // reset extra turn for B
                             data_model.resetExtraTurnB();
                             data_model.updateStonesB(indexOfPitInDataModel);
                         }
@@ -357,10 +356,9 @@ public class VerticalLayout extends JComponent implements BoardLayout
         }
     }
 
-    // player A is 1, and player B is 2
-
     /**
      * determine who is the current player
+     * player A is 1, and player B is 2
      * @param a_player int 1 or 2
      */
     public void whosTurn(int a_player) {
@@ -369,7 +367,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
             message.setText("Player A's turn!");
         else
             message.setText("Player B's turn!");
-//        message.setText("Now is Player " + player + "'s turn!");
         message.setFont(new Font("Arial", Font.PLAIN, Math.min(25, 25)));
     }
 }
