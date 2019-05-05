@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * Creates and displays a rounded rectangle for a JButton 
  * 
