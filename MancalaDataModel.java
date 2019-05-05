@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * This MancalaDataModel class works as a model in MVC pattern
  * It contains all the number of stones data that would be updated by the users interactions and notify the change to View
