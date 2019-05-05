@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * Creates and displays a round stone, with the given number of stones 
  * 
