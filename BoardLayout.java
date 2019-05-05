@@ -31,5 +31,5 @@ public interface BoardLayout
      * @param player : A (1) or B (2)
      */
     public void whosTurn(int player);
-    
+
 }
