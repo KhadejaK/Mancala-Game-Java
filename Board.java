@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * This class is the control/view of the MVC Pattern, as well as the context of the Strategy Pattern
  * It contains a pop-up home page frame to let users to choose layout and number of stones (control/view)
