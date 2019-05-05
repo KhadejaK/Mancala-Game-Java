@@ -1,5 +1,15 @@
 package MancalaProject;
 
+/**
+ * This is a concrete horizontal layout class implementing the BoardLayout interface
+ * It displays a horizontal layout of a Mancala board game
+ * It also has the actionListener's and the method to repaint the stones in each pit after
+ * the stones have changed
+ * 
+ * @author Khadeja Khalid
+ * @version 1.0 5/4/2019
+ */
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,8 +17,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-@SuppressWarnings("serial")
-public class HorizontalLayout extends JFrame implements BoardLayout
+public class HorizontalLayout implements BoardLayout
 {
 	private static final int BASE_HEIGHT = 800;
 	private static final int BASE_WIDTH =  1800;
@@ -22,6 +31,10 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 	
 	private JLabel message;
 	
+	/**
+	 * Initializes empty and default values
+	 * @param dm : DataModel to attach with the layout
+	 */
 	public HorizontalLayout(MancalaDataModel dm)
 	{
 		data = new int[TOTAL_PITS];
@@ -34,6 +47,10 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		message = new JLabel();
 	}
 	
+	/**
+	 * Set's the data with the given array
+	 * @param d : Integer array of the data
+	 */
 	public void setData(int[] d)
 	{
 		for(int i=0; i<d.length; i++)
@@ -42,6 +59,10 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		}
 	}
 
+	/**
+	 * Draw's an empty mancala board with a horizontal layout
+	 * Contains JButton pits A1-6, Mancala A, JButton pits B1-6, MancalaB, and an undo button
+	 */
 	public void drawBoard()
 	{
 		Color darkBlue = new Color(59, 168, 226);
@@ -56,12 +77,13 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		
 		base.setLayout(new BorderLayout());
 		
-		// Mancala B
+		// Create Mancala B
 		JPanel mancalaB = new JPanel();
 		mancalaB.setLayout(new BorderLayout());
 		mancalaB.setSize(200, 800);
 		mancalaB.setBackground(darkBlue);
 		base.setOpaque(true);
+		
 		JLabel labelB = new JLabel("Mancala B");
 		labelB.setFont(new Font("Serif", Font.BOLD, 40));
 		labelB.setHorizontalAlignment(SwingConstants.CENTER);
@@ -171,7 +193,7 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		
 		base.add(board, BorderLayout.CENTER);
 		
-		// Mancala A
+		// Create Mancala A
 		JPanel mancalaA = new JPanel();
 		mancalaA.setLayout(new BorderLayout());
 		mancalaA.setSize(200, 800);
@@ -261,6 +283,9 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 	    frame.setVisible(true);
 	}
 	
+	/**
+	 * Repaint the mancala's pits with the updated data
+	 */
 	public void repaintStones()
 	{
 		for (int i=0; i<TOTAL_PITS; i++)
@@ -279,6 +304,9 @@ public class HorizontalLayout extends JFrame implements BoardLayout
 		}
 	}
 
+	/**
+	 * Set the player and the text to the appropriate player
+	 */
 	public void whosTurn(int whosturn) 
 	{
 		model.setPlayer(whosturn);

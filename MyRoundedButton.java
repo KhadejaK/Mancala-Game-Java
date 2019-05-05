@@ -1,5 +1,12 @@
 package MancalaProject;
 
+/**
+ * Creates and displays a rounded rectangle for a JButton 
+ * 
+ * @author Khadeja Khalid
+ * @version 1.0 5/4/2019
+ */
+
 import java.awt.*;
 import javax.swing.JButton;
 
@@ -8,6 +15,13 @@ public class MyRoundedButton extends JButton
 {
 	private int height;
 	private int width;
+	
+	/**
+	 * Constructs a MyRoundedButton with the given width and height
+	 * 
+	 * @param w : width
+	 * @param h : height
+	 */
 	public MyRoundedButton(int w, int h)
 	{
 		height = h;
@@ -15,6 +29,10 @@ public class MyRoundedButton extends JButton
 		setContentAreaFilled(false);
 	}
 	
+	/**
+	 * Paints the border of a rounded Jbutton
+	 * The color is a dark blue
+	 */
 	public void paintBorder(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
@@ -26,6 +44,11 @@ public class MyRoundedButton extends JButton
 		g2.drawRoundRect(12, 12, width+11, height+11, 40, 40);
 	}
 	
+	/**
+	 * Paints a rounded JButton
+	 * The color is a light blue originally
+	 * The color is a lighter blue when pressed
+	 */
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;

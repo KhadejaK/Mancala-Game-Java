@@ -1,10 +1,15 @@
+package MancalaProject;
 
 /**
- * This is a concrete vertical layout class out of the layout manger interface
- * It displays a vertical layout board of the mancala game with the JComponent
- * and implements the actionListener and repaint stones in each pit after
+ * This is a concrete vertical layout class out of the layout manage interface
+ * It displays a vertical layout board of the Mancala game with the JComponent
+ * and implements the actionListener and repaints stones in each pit after
  * stones' numbers are changed, and this class also implements who is current and next
  * player.
+ * 
+ * @author Yu Xiu
+ * @version 1.0 5/4/2019
+ * 
  */
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,8 +17,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 
+@SuppressWarnings("serial")
 public class VerticalLayout extends JComponent implements BoardLayout
 {
     private MancalaDataModel data_model;
@@ -58,7 +64,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
     }
 
     /**
-     * draw mancala board
+     * draw Mancala board
      */
     public void drawBoard() {
 
@@ -73,7 +79,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
             button.setBorder(new LineBorder(black));
 
             // vertical layout button array index
-            final int indexOfPitInButtons = i;
+            //final int indexOfPitInButtons = i;
             // data model array index
             final int indexOfPitInDataModel = i;
 
@@ -83,9 +89,10 @@ public class VerticalLayout extends JComponent implements BoardLayout
                 public void actionPerformed(ActionEvent e) {
                     // if player A, works; otherwise doesn't work
                     if (data_model.getPlayer() == 1) {
-                        if(data[indexOfPitInButtons] != 0) {
-                            System.out.println("ActionListener of A: button = " + indexOfPitInButtons + ", update data = "
-                                    + indexOfPitInDataModel);
+                        if(data[indexOfPitInDataModel] != 0) {
+//                            System.out.println("ActionListener of A: button = " + indexOfPitInButtons + ", update data = "
+//                                    + indexOfPitInDataModel);
+                            data_model.resetExtraTurnA();
                             // update stones in pit
                             data_model.updateStonesA(indexOfPitInDataModel);
                         }
@@ -105,7 +112,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
             button.setBorder(new LineBorder(black));
 
             // map vertical layout pit index to data model index
-            final int indexOfPitInButtons = i + 6;
+            //final int indexOfPitInButtons = i + 6;
             // 18-(i + 6) = 12 - i
             final int indexOfPitInDataModel = 12 - i;
 
@@ -117,9 +124,11 @@ public class VerticalLayout extends JComponent implements BoardLayout
                     //button.repaint();
                     // if user B, it works, otherwise, not working
                     if (data_model.getPlayer() == 2) {
-                        if(data[indexOfPitInButtons] != 0) {
-                            System.out.println("ActionListener of B: button = " + indexOfPitInButtons + ", update data = "
-                                    + indexOfPitInDataModel);
+                        if(data[indexOfPitInDataModel] != 0) {
+//                            System.out.println("ActionListener of B: button = " + indexOfPitInButtons + ", update data = "
+//                                    + indexOfPitInDataModel);
+                            // reset extra turn for B
+                            data_model.resetExtraTurnB();
                             data_model.updateStonesB(indexOfPitInDataModel);
                         }
                     }
@@ -201,36 +210,77 @@ public class VerticalLayout extends JComponent implements BoardLayout
         undo.setPreferredSize(new Dimension(50,30));
         undo.setFont(new Font("Lucida", Font.TYPE1_FONT, 20));
 
-        // TODO: undo button
         // undo button actionListener
         undo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(data_model.getPlayer() == PLAYER_B && data_model.getUndoNumA() < 3 && !data_model.compareBoard())
+                // if A has a free turn && player is A && A undo number is less than 3 && current != previous board
+                if( data_model.isExtraTurnA() && (data_model.getPlayer() == PLAYER_A) &&
+                        data_model.getUndoNumA() < 3 && !data_model.compareBoard() )
                 {
-                    // Set player back to A
-                    data_model.setPlayer(PLAYER_A);
+                    // undo number + 1
                     data_model.incUndoNumA();
+                    // A can undo
                     data_model.setUndo(true);
 
+                    // go back to previous state
                     int[] prevData = data_model.getPrevData();
+                    // set and update previous data
                     data_model.setDataAndUpdate(prevData);
 
+                    // when go back to previous data, A can not click undo in a sequence
                     data_model.setUndo(false);
                 }
-                else if(data_model.getPlayer() == PLAYER_A && data_model.getUndoNumB() < 3 && !data_model.compareBoard())
+                // if B has free turn and player is B and A undo number of B < 3 and current != previous board
+                else if(!data_model.isExtraTurnB() && (data_model.getPlayer() == PLAYER_B) &&
+                        data_model.getUndoNumA() < 3 && !data_model.compareBoard())
                 {
-                    // Set player back to B
-                    data_model.setPlayer(PLAYER_B);
+                    // set player as A
+                    data_model.setPlayer(PLAYER_A);
+                    // A's undo + 1
+                    data_model.incUndoNumA();
+                    // A can undo
+                    data_model.setUndo(true);
+
+                    // set data as previous data
+                    int[] prevData = data_model.getPrevData();
+                    data_model.setDataAndUpdate(prevData);
+
+                    // B can not undo in sequence
+                    data_model.setUndo(false);
+                }
+                // B has free turn && player is B && undo number of B < 3 and previous board != current board
+                else if( data_model.isExtraTurnB() && (data_model.getPlayer() == PLAYER_B) &&
+                        data_model.getUndoNumB() < 3 && !data_model.compareBoard() )
+                {
+                    // B's undo + 1
                     data_model.incUndoNumB();
+                    // B can undo
+                    data_model.setUndo(true);
+
+                    // set data as previous state
+                    int[] prevData = data_model.getPrevData();
+                    data_model.setDataAndUpdate(prevData);
+
+                    // B can not undo
+                    data_model.setUndo(false);
+                }
+                // if A has free turn && player is A && undo number of B < 3 and previous board != current
+                else if( !data_model.isExtraTurnA() && (data_model.getPlayer() == PLAYER_A) &&
+                        data_model.getUndoNumB() < 3 && !data_model.compareBoard())
+                {
+                    // set player as B
+                    data_model.setPlayer(PLAYER_B);
+                    // B's undo + 1
+                    data_model.incUndoNumB();
+                    // B can undo
                     data_model.setUndo(true);
 
                     int[] prevData = data_model.getPrevData();
                     data_model.setDataAndUpdate(prevData);
-
+                    // B can not undo
                     data_model.setUndo(false);
                 }
-
             }
         });
 
@@ -264,7 +314,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
      * repaint stones in pits
      */
     public void repaintStones() {
-        System.out.println("V layout repaint stones: " + Arrays.toString(data));
+//        System.out.println("V layout repaint stones: " + Arrays.toString(data));
 
         // stones
         Color stone_color = Color.GRAY;
@@ -296,7 +346,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
             button.removeAll();
             for (int j = 0; j < num_stone; j++) {
                 button.add(new JLabel(new SquareStone(stone_size, stone_color)));
-
             }
             button.repaint();
         }
@@ -314,10 +363,9 @@ public class VerticalLayout extends JComponent implements BoardLayout
         }
     }
 
-    // player A is 1, and player B is 2
-
     /**
      * determine who is the current player
+     * player A is 1, and player B is 2
      * @param a_player int 1 or 2
      */
     public void whosTurn(int a_player) {
@@ -326,6 +374,6 @@ public class VerticalLayout extends JComponent implements BoardLayout
             message.setText("Player A's turn!");
         else
             message.setText("Player B's turn!");
-//        message.setText("Now is Player " + player + "'s turn!");
         message.setFont(new Font("Arial", Font.PLAIN, Math.min(25, 25)));
     }
+}
