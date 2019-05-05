@@ -1,29 +1,35 @@
 /**
  * Interface class works as layout management strategy
  * It provides shared functions for concrete strategy classes
+ * 
+ * @author Khadeja Khalid, Yu Xiu
+ * @version 1.0 5/4/2019
  */
-public interface BoardLayout {
-    // Methods shared by both layout1 and layout2
+
+public interface BoardLayout 
+{
+    // Methods shared by both HorizontalLayout and VerticalLayout
 
     /**
-     * set data
-     * @param data
+     * Set the data
+     * @param data : integer array of the data
      */
     public void setData(int[] data);
 
     /**
-     * draw a Mancala game board
+     * Draw the Mancala game board
      */
     public void drawBoard();
 
     /**
-     * repaint stones in pits
+     * Repaint stones in pits
      */
     public void repaintStones();
 
     /**
-     * determines turns of players
-     * @param player
+     * Set's who's turn it currently is
+     * @param player : A (1) or B (2)
      */
     public void whosTurn(int player);
+
 }

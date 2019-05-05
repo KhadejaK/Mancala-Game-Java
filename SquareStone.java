@@ -1,5 +1,8 @@
 /**
  * This class draw a stone icon which would be displayed in the Mancala Board pits
+ * 
+ * @author Yu Xiu
+ * @version 1.0 5/4/2019
  */
 
 import javax.swing.*;

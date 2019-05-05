@@ -1,9 +1,13 @@
 /**
- * This class is the context of the MVC pattern, and it uses the controller
- * It contains popup homepage frame to let users to choose layout and number of stones
- * It contains the gameOver screen function which would display the winner and gameOver screen
- * It contains displayBoard function to display both vertical and horizontal layout Mancala boards
+ * This class is the control/view of the MVC Pattern, as well as the context of the Strategy Pattern
+ * It contains a pop-up home page frame to let users to choose layout and number of stones (control/view)
+ * It contains the gameOver screen function which would display the winner and gameOver screen (view)
+ * It contains displayBoard function to display both vertical and horizontal layout Mancala boards (control/view/context)
  * It states changed to both layout and model then repaint the pits in the board
+ * 
+ * @author Khadeja Khalid, Yu Xiu
+ * @version 1.0 5/4/2019
+ * 
  */
 
 import java.awt.*;
@@ -12,6 +16,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.*;
 
+@SuppressWarnings("serial")
 public class Board extends JFrame implements ChangeListener
 {
     private int[] data;
@@ -22,7 +27,7 @@ public class Board extends JFrame implements ChangeListener
     private static final int PLAYER_B = 2;
 
     /**
-     * Construct the Board
+     * Constructs the Board with dafault values
      * @param dm
      */
     public Board(MancalaDataModel dm)
@@ -42,7 +47,9 @@ public class Board extends JFrame implements ChangeListener
     }
 
     /**
-     * States changed to both layout and data
+     * stateChanged
+     * Get's the updated data from the DataModel class and repaints the stones
+     * Decides who's turn it is by checking if there was an extra turn or undo
      * @param e
      */
     public void stateChanged(ChangeEvent e)
@@ -120,7 +127,7 @@ public class Board extends JFrame implements ChangeListener
     /**
      * When one side of pits is empty, a game over screen would be popped up with the player who has most stones
      * in his mancala
-     * @param winner player A or B, as 1 or 2
+     * @param winner : player A or B, as 1 or 2
      */
     public void gameOverScreen(int winner)
     {

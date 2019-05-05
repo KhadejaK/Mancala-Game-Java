@@ -4,6 +4,10 @@
  * and implements the actionListener and repaints stones in each pit after
  * stones' numbers are changed, and this class also implements who is current and next
  * player.
+ * 
+ * @author Yu Xiu
+ * @version 1.0 5/4/2019
+ * 
  */
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -11,8 +15,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 
+@SuppressWarnings("serial")
 public class VerticalLayout extends JComponent implements BoardLayout
 {
     private MancalaDataModel data_model;
@@ -72,7 +77,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
             button.setBorder(new LineBorder(black));
 
             // vertical layout button array index
-            final int indexOfPitInButtons = i;
+            //final int indexOfPitInButtons = i;
             // data model array index
             final int indexOfPitInDataModel = i;
 
@@ -83,8 +88,8 @@ public class VerticalLayout extends JComponent implements BoardLayout
                     // if player A, works; otherwise doesn't work
                     if (data_model.getPlayer() == 1) {
                         if(data[indexOfPitInDataModel] != 0) {
-                            System.out.println("ActionListener of A: button = " + indexOfPitInButtons + ", update data = "
-                                    + indexOfPitInDataModel);
+//                            System.out.println("ActionListener of A: button = " + indexOfPitInButtons + ", update data = "
+//                                    + indexOfPitInDataModel);
                             data_model.resetExtraTurnA();
                             // update stones in pit
                             data_model.updateStonesA(indexOfPitInDataModel);
@@ -105,7 +110,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
             button.setBorder(new LineBorder(black));
 
             // map vertical layout pit index to data model index
-            final int indexOfPitInButtons = i + 6;
+            //final int indexOfPitInButtons = i + 6;
             // 18-(i + 6) = 12 - i
             final int indexOfPitInDataModel = 12 - i;
 
@@ -118,8 +123,8 @@ public class VerticalLayout extends JComponent implements BoardLayout
                     // if user B, it works, otherwise, not working
                     if (data_model.getPlayer() == 2) {
                         if(data[indexOfPitInDataModel] != 0) {
-                            System.out.println("ActionListener of B: button = " + indexOfPitInButtons + ", update data = "
-                                    + indexOfPitInDataModel);
+//                            System.out.println("ActionListener of B: button = " + indexOfPitInButtons + ", update data = "
+//                                    + indexOfPitInDataModel);
                             // reset extra turn for B
                             data_model.resetExtraTurnB();
                             data_model.updateStonesB(indexOfPitInDataModel);
@@ -307,7 +312,7 @@ public class VerticalLayout extends JComponent implements BoardLayout
      * repaint stones in pits
      */
     public void repaintStones() {
-        System.out.println("V layout repaint stones: " + Arrays.toString(data));
+//        System.out.println("V layout repaint stones: " + Arrays.toString(data));
 
         // stones
         Color stone_color = Color.GRAY;

@@ -1,6 +1,10 @@
 /**
  * This MancalaDataModel class works as a model in MVC pattern
  * It contains all the number of stones data that would be updated by the users interactions and notify the change to View
+ * 
+ * @author Khadeja Khalid, Yu Xiu, Hassitha Pidaparthi
+ * @version 1.0 5/4/2019
+ * 
  */
 
 import java.util.ArrayList;
@@ -27,7 +31,8 @@ public class MancalaDataModel
     private int player = PLAYER_A;
 
     /**
-     * Construct model
+     * Construct the DataModel
+     * Initialize empty/false values
      */
     public MancalaDataModel()
     {
@@ -67,8 +72,8 @@ public class MancalaDataModel
     }
 
     /**
-     * Get data
-     * @return integer array of data
+     * Return's a deep copy of the data
+     * @return an integer array of the copied data
      */
     public int[] getData()
     {
@@ -81,8 +86,8 @@ public class MancalaDataModel
     }
 
     /**
-     * Get previous data
-     * @return integer array of previous data
+     * Get the a deep copy of the previous data
+     * @return integer array of the copied previous data
      */
     public int[] getPrevData()
     {
@@ -95,8 +100,9 @@ public class MancalaDataModel
     }
 
     /**
-     * Initially display all the stones to pits
-     * @param initialValue
+     * Initial value of the stones in the pits
+     * Keep the Mancala's empty
+     * @param initialValue : 3 or 4
      */
     public void initialStones(int initialValue)
     {
@@ -130,8 +136,8 @@ public class MancalaDataModel
     }
 
     /**
-     * set data and update pits
-     * @param a
+     * Sets the data and updates the pits though the change listeners
+     * @param a : integer array with updated values
      */
     public void setDataAndUpdate(int[] a)
     {
@@ -149,7 +155,7 @@ public class MancalaDataModel
 
     /**
      * Attach actionListeners
-     * @param c
+     * @param c : ChangeListener
      */
     public void attach(ChangeListener c)
     {
@@ -158,7 +164,14 @@ public class MancalaDataModel
 
     /**
      * Update stones in pit A
-     * @param initialPit
+     * When a pit is clicked on A's side, starting at the given pit, update the rest of the pits 
+     * If the last stone you drop is your own Mancala, you get a free turn
+     * If the last stone you drop is in an empty pit on your side,
+     *      you get to take that stone and all of your opponents stones that are in the opposite pit.
+     * Skip opponent B's Mancala
+     * The game ends when all six pits on one side of the Mancala board are empty
+     * 
+     * @param initialPit : specific pit clicked
      */
     public void updateStonesA(int initialPit)
     {
@@ -221,22 +234,11 @@ public class MancalaDataModel
             }
         }
 
-        // if one side row is empty, game over
+        // If one side row is empty, game over
         if(checkForEmptyRow())
             isGameOver = true;
 
-        // Starting at given pit, move stones
-        // for loop starting at initial pit
-        // If the last stone you drop is your own Mancala, you get a free turn
-        // If the last stone you drop is in an empty pit on your side,
-        //   you get to take that stone and all of your opponents stones
-        //   that are in the opposite pit.
-        //    - One stone, any empty pit on your side, take your stone and
-        //       opponents stones in opposite side and put in your Mancala
-        // Skip opponents Mancala
-        // The game ends when all six pits on one side of the Mancala board are empty
-
-        //Notify
+        // Notify
         for (ChangeListener l : listeners)
         {
             l.stateChanged(new ChangeEvent(this));
@@ -244,8 +246,15 @@ public class MancalaDataModel
     }
 
     /**
-     * Update stones in pits B
-     * @param initialPit
+     * Update stones in pit B
+     * When a pit is clicked on B's side, starting at the given pit, update the rest of the pits 
+     * If the last stone you drop is your own Mancala, you get a free turn
+     * If the last stone you drop is in an empty pit on your side,
+     *      you get to take that stone and all of your opponents stones that are in the opposite pit.
+     * Skip opponent A's Mancala
+     * The game ends when all six pits on one side of the Mancala board are empty
+     * 
+     * @param initialPit : specific pit clicked
      */
     public void updateStonesB(int initialPit)
     {
@@ -319,10 +328,11 @@ public class MancalaDataModel
             stones--;
         }
 
+        // if one side row is empty, game over
         if(checkForEmptyRow())
             isGameOver = true;
 
-        //Notify
+        // Notify
         for (ChangeListener l : listeners)
         {
             l.stateChanged(new ChangeEvent(this));
@@ -331,7 +341,7 @@ public class MancalaDataModel
 
     /**
      * Determines extra turn for A
-     * @return boolean
+     * @return boolean value if there is an extra turn for A or not
      */
     public boolean isExtraTurnA()
     {
@@ -340,7 +350,7 @@ public class MancalaDataModel
 
     /**
      * Determines extra turn for B
-     * @return boolean
+     * @return boolean value if there is an extra turn for B or not
      */
     public boolean isExtraTurnB()
     {
@@ -365,7 +375,7 @@ public class MancalaDataModel
 
     /**
      * Check if one side of row is completely empty
-     * @return
+     * @return boolean value if there is an empty row or not
      */
     public boolean checkForEmptyRow()
     {
@@ -379,7 +389,7 @@ public class MancalaDataModel
 
     /**
      * Check if game is over
-     * @return boolean
+     * @return boolean value if the game is over or not
      */
     public boolean isGameOver()
     {
@@ -387,8 +397,9 @@ public class MancalaDataModel
     }
 
     /**
-     * Check who is the winner
-     * @return integer winner
+     * Check who is the winner by counting all of the stones each player has
+     * The player with the most stones on their side is the winner
+     * @return integer : the winner A (1) or B (2)
      */
     public int getWinner()
     {
@@ -418,7 +429,7 @@ public class MancalaDataModel
 
     /**
      * Compare to current board and previous board
-     * @return
+     * @return boolean value if they are equal or not
      */
     public boolean compareBoard()
     {
@@ -427,7 +438,7 @@ public class MancalaDataModel
 
     /**
      * Get undo numbers of A
-     * @return integer numbers of undo of A
+     * @return integer of how many undo's A has
      */
     public int getUndoNumA()
     {
@@ -435,8 +446,8 @@ public class MancalaDataModel
     }
 
     /**
-     * Ger undo numbers of B
-     * @return integer numbers of undo of B
+     * Get undo numbers of B
+     * @return integer of how many undo's B has
      */
     public int getUndoNumB()
     {
@@ -444,14 +455,14 @@ public class MancalaDataModel
     }
 
     /**
-     * Reset undo number of A to 0
+     * Reset the number of undo's A has to 0
      */
     public void resetUndoNumA()
     {
         undoNumA = 0;
     }
     /**
-     * Reset undo number of Bto 0
+     * RReset the number of undo's B has to 0
      */
     public void resetUndoNumB()
     {
@@ -459,14 +470,14 @@ public class MancalaDataModel
     }
 
     /**
-     * Increment undo number of A by 1 each time
+     * Increment undo number of A by 1
      */
     public void incUndoNumA()
     {
         undoNumA++;
     }
     /**
-     * Increment undo number of B by 1 each time
+     * Increment undo number of B by 1 
      */
     public void incUndoNumB()
     {
@@ -474,8 +485,8 @@ public class MancalaDataModel
     }
 
     /**
-     * Check if undo
-     * @return boolean
+     * Return true if the undo button was invoked, otherwise false
+     * @return boolean value if there was an undo or not
      */
     public boolean isUndo()
     {
@@ -483,8 +494,8 @@ public class MancalaDataModel
     }
 
     /**
-     * Set undo
-     * @param isUnd boolean
+     * Sets the undo value
+     * @param isUnd : boolean value of the undo
      */
     public void setUndo(boolean isUnd)
     {
@@ -492,8 +503,8 @@ public class MancalaDataModel
     }
 
     /**
-     * Get a player
-     * @return integer of player
+     * Get the player
+     * @return integer of player (1 or 2)
      */
     public int getPlayer()
     {
@@ -501,8 +512,8 @@ public class MancalaDataModel
     }
 
     /**
-     * Set player
-     * @param turn player
+     * Set the player
+     * @param turn : current players turn (1 or 2)
      */
     public void setPlayer(int turn)
     {
