@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * This is a concrete horizontal layout class implementing the BoardLayout interface
  * It displays a horizontal layout of a Mancala board game
