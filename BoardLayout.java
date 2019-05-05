@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * Interface class works as layout management strategy
  * It provides shared functions for concrete strategy classes
