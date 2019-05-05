@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * This is a concrete vertical layout class out of the layout manage interface
  * It displays a vertical layout board of the Mancala game with the JComponent
