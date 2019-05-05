@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * This class draw a stone icon which would be displayed in the Mancala Board pits
  * 
