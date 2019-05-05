@@ -1,5 +1,3 @@
-package MancalaProject;
-
 /**
  * Creates a MancalaDataModel, Board (view/control), attaches the model to the board,
  * and calls the home page of the board, for the user to select their layout and start the game
